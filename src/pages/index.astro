@@ -321,18 +321,27 @@ function getSocialIcon(platform) {
 
   if (viewer && tabs.length && panels.length) {
     const keys = tabs.map((tab) => tab.dataset.view);
+    const tabsMap = Object.fromEntries(panels.map((panel) => [panel.dataset.panel, panel]));
+
+    const setCurrentKey = (key) => {
+      viewer.dataset.activeView = key;
+    };
 
     const setActive = (key) => {
-      tabs.forEach((tab) => {
-        const isActive = tab.dataset.view === key;
-        tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
-      });
-
-      panels.forEach((panel) => {
-        panel.dataset.active = panel.dataset.panel === key ? 'true' : 'false';
-      });
-
-      viewer.dataset.activeView = key;
+      if (!key || !tabsMap[key]) return;
+      
+      // 重置滚动位置到内容区域顶部，避免菜单栏遮挡
+      const viewer = document.querySelector('.content-viewer');
+      if (viewer) {
+        viewer.scrollTop = 0;
+      }
+      
+      tabs.forEach((tab) => tab.setAttribute('aria-selected', 'false'));
+      Object.values(tabsMap).forEach((panel) => panel.classList.remove('is-active'));
+      tabsMap[key].classList.add('is-active');
+      const activeTab = tabs.find((t) => t.dataset.view === key);
+      if (activeTab) activeTab.setAttribute('aria-selected', 'true');
+      setCurrentKey(key);
     };
 
     const getCurrentKey = () => viewer.dataset.activeView || 'games';

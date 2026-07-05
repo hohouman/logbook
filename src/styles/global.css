@@ -287,7 +287,8 @@ img {
   display: grid;
   gap: 1.25rem;
   width: 100%;
-  min-height: calc(100svh - 4rem);
+  min-height: auto;
+  padding: 6rem 0 3rem;
   position: relative;
 }
 
@@ -1125,6 +1126,24 @@ img {
   background: rgba(255, 255, 255, 0.14);
 }
 
+@media (max-width: 1024px) {
+  .landing-hero {
+    padding: 4rem 0 2rem;
+  }
+
+  .profile-panel--landing {
+    max-width: 90%;
+  }
+
+  .landing-title {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+
+  .landing-bio {
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+  }
+}
+
 @media (max-width: 900px) {
   .site-header {
     border-radius: 24px;
@@ -1160,8 +1179,31 @@ img {
     min-height: 100svh;
   }
 
+  .landing-hero {
+    padding: 3rem 0 1.5rem;
+  }
+
   .landing-hero__grid {
     gap: 1rem;
+  }
+
+  .profile-panel--landing {
+    max-width: 95%;
+    padding: 1rem;
+  }
+
+  .profile-avatar {
+    width: 4rem;
+    height: 4rem;
+  }
+
+  .landing-title {
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
+  }
+
+  .landing-bio {
+    font-size: 0.85rem;
+    line-height: 1.5;
   }
 
   .site-link-grid {
