@@ -1,0 +1,9 @@
+{
+  "name": "Logbook User",
+  "bio": "Content curator and enthusiast",
+  "avatar": "/avatar.jpg",
+  "social": {
+    "github": "https://github.com",
+    "twitter": "https://twitter.com"
+  }
+}

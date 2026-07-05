@@ -158,9 +158,9 @@ declare module 'astro:content' {
   collection: "_generated";
   data: any;
 }>;
-"data": Record<string, {
+"config": Record<string, {
   id: string;
-  collection: "data";
+  collection: "config";
   data: any;
 }>;
 
