@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import puppeteer from 'puppeteer';
-import axios from 'axios';
+import { Buffer } from 'buffer';
 import sharp from 'sharp';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -21,8 +21,9 @@ await fs.mkdir(GENERATED_DIR, { recursive: true });
  */
 async function getSteamData(appId) {
   try {
-    const response = await axios.get(`https://store.steampowered.com/api/appdetails?appids=${appId}`);
-    const appData = response.data[appId]?.data;
+    const response = await fetch(`https://store.steampowered.com/api/appdetails?appids=${appId}`);
+    const data = await response.json();
+    const appData = data[appId]?.data;
     
     if (!appData) {
       console.log(`未找到Steam应用ID ${appId} 的数据`);
@@ -51,10 +52,14 @@ async function getSteamData(appId) {
  */
 async function getEpicData(productSlug) {
   try {
-    const response = await axios.get(`https://store.epicgames.com/p/${productSlug}`);
+    const response = await fetch(`https://store.epicgames.com/p/${productSlug}`);
     
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const html = await response.text();
     // 简单的解析方式，实际可能需要更复杂的解析
-    const html = response.data;
     const titleMatch = html.match(/<title[^>]*>(.*?)<\/title>/i);
     const title = titleMatch ? titleMatch[1].replace(' | Epic Games Store', '').trim() : productSlug;
 
@@ -87,7 +92,10 @@ async function getEpicData(productSlug) {
  */
 async function getDoubanData(doubanId, type) {
   try {
-    const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+    const browser = await puppeteer.launch({ 
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    });
     const page = await browser.newPage();
     
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
@@ -191,13 +199,13 @@ async function downloadAndConvertImage(url, fileName) {
   if (!url) return null;
 
   try {
-    const response = await axios({
-      method: 'GET',
-      url: url,
-      responseType: 'arraybuffer'
-    });
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Failed to download image: ${response.statusText}`);
+    }
 
-    const imageBuffer = Buffer.from(response.data, 'binary');
+    const imageBuffer = Buffer.from(await response.arrayBuffer());
     
     // 使用sharp将图片转换为WebP格式并优化
     const optimizedImageBuffer = await sharp(imageBuffer)
@@ -219,42 +227,47 @@ async function downloadAndConvertImage(url, fileName) {
  * 解析URL获取平台和ID
  */
 function parseUrl(url) {
-  const parsedUrl = new URL(url);
-  
-  // Steam
-  if (parsedUrl.hostname.includes('store.steampowered.com')) {
-    const match = parsedUrl.pathname.match(/\/app\/(\d+)/);
-    if (match) {
-      return { platform: 'steam', id: match[1], url };
+  try {
+    const parsedUrl = new URL(url);
+    
+    // Steam
+    if (parsedUrl.hostname.includes('store.steampowered.com')) {
+      const match = parsedUrl.pathname.match(/\/app\/(\d+)/);
+      if (match) {
+        return { platform: 'steam', id: match[1], url };
+      }
     }
-  }
-  
-  // Epic Games
-  if (parsedUrl.hostname.includes('epicgames.com')) {
-    const segments = parsedUrl.pathname.split('/');
-    const slugIndex = segments.indexOf('p');
-    if (slugIndex !== -1 && segments[slugIndex + 1]) {
-      return { platform: 'epic', id: segments[slugIndex + 1], url };
+    
+    // Epic Games
+    if (parsedUrl.hostname.includes('epicgames.com')) {
+      const segments = parsedUrl.pathname.split('/');
+      const slugIndex = segments.indexOf('p');
+      if (slugIndex !== -1 && segments[slugIndex + 1]) {
+        return { platform: 'epic', id: segments[slugIndex + 1], url };
+      }
     }
-  }
-  
-  // 豆瓣电影
-  if (parsedUrl.hostname.includes('movie.douban.com')) {
-    const match = parsedUrl.pathname.match(/\/subject\/(\d+)/);
-    if (match) {
-      return { platform: 'douban', id: match[1], type: 'movie', url };
+    
+    // 豆瓣电影
+    if (parsedUrl.hostname.includes('movie.douban.com')) {
+      const match = parsedUrl.pathname.match(/\/subject\/(\d+)/);
+      if (match) {
+        return { platform: 'douban', id: match[1], type: 'movie', url };
+      }
     }
-  }
-  
-  // 豆an图书
-  if (parsedUrl.hostname.includes('book.douban.com')) {
-    const match = parsedUrl.pathname.match(/\/subject\/(\d+)/);
-    if (match) {
-      return { platform: 'douban', id: match[1], type: 'book', url };
+    
+    // 豆瓣图书
+    if (parsedUrl.hostname.includes('book.douban.com')) {
+      const match = parsedUrl.pathname.match(/\/subject\/(\d+)/);
+      if (match) {
+        return { platform: 'douban', id: match[1], type: 'book', url };
+      }
     }
-  }
 
-  return null;
+    return null;
+  } catch (error) {
+    console.error(`无效的URL: ${url}`, error.message);
+    return null;
+  }
 }
 
 /**
@@ -291,7 +304,7 @@ async function processUrl(url, existingDataMap) {
   // 下载并转换封面图片
   if (data.coverUrl) {
     const ext = path.extname(data.coverUrl).split('.')[1] || 'webp';
-    const fileName = `${data.type}_${data.id}.${ext}`;
+    const fileName = `${data.type}_${data.id}_cover.webp`;
     const imagePath = await downloadAndConvertImage(data.coverUrl, fileName);
     data.localCoverPath = imagePath;
   }
@@ -320,7 +333,14 @@ async function main() {
       }
       
       const configContent = await fs.readFile(configPath, 'utf-8');
-      const urls = JSON.parse(configContent);
+      let urls;
+      
+      try {
+        urls = JSON.parse(configContent);
+      } catch (e) {
+        console.error(`${configFile} 不是有效的JSON文件`);
+        continue;
+      }
       
       if (!Array.isArray(urls)) {
         console.error(`${configFile} 格式错误，应为数组`);
@@ -328,7 +348,7 @@ async function main() {
       }
 
       // 读取现有生成的数据
-      const generatedFile = path.join(GENERATED_DIR, configFile.replace('.json', '.generated.json'));
+      const generatedFile = path.join(GENERATED_DIR, configFile);
       let existingData = [];
       let existingDataMap = {};
       
@@ -338,7 +358,8 @@ async function main() {
         
         // 创建现有数据的映射，便于快速查找
         existingDataMap = existingData.reduce((acc, item) => {
-          acc[`${item.platform}_${item.id}`] = item;
+          const key = `${item.platform}_${item.id}`;
+          acc[key] = item;
           return acc;
         }, {});
       } catch {
@@ -368,7 +389,7 @@ async function main() {
 
       // 写入生成的文件
       await fs.writeFile(generatedFile, JSON.stringify(allResults, null, 2));
-      console.log(`完成处理 ${configFile}，生成 ${results.length} 条新数据`);
+      console.log(`完成处理 ${configFile}，共 ${allResults.length} 条数据 (${results.length} 条新数据)`);
     }
     
     console.log('所有数据处理完成！');
