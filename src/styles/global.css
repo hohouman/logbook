@@ -284,8 +284,6 @@ img {
 }
 
 .landing-hero {
-  display: grid;
-  gap: 1.25rem;
   width: 100%;
   min-height: 100svh;
   padding: 0;
