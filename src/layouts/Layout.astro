@@ -45,6 +45,11 @@ const pageFrameClass = heroFullscreen ? 'page-frame page-frame--landing' : 'page
       <div class={`hero-banner-content${heroFullscreen ? ' hero-banner-content--landing' : ''}`}>
         <slot name="hero" />
       </div>
+      {heroFullscreen ? (
+        <a href="#content-tabs" class="hero-scroll-link" aria-label="滚动到下一页">
+          <span class="hero-scroll-link__arrow" aria-hidden="true">↓</span>
+        </a>
+      ) : null}
     </section>
 
     <main class={pageClass}>

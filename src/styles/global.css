@@ -191,6 +191,7 @@ img {
   border: 0;
   border-radius: 0;
   box-shadow: none;
+  position: relative;
 }
 
 .hero-banner-image,
