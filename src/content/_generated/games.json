@@ -1,19 +1,20 @@
 [
   {
     "id": "264710",
-    "title": "Subnautica",
+    "title": "Subnautica - 深海迷航",
     "developer": [
       "Unknown Worlds Entertainment"
     ],
     "publisher": [
       "Unknown Worlds Entertainment"
     ],
-    "releaseDate": "23 Jan, 2018",
+    "releaseDate": "2018 年 1 月 23 日",
     "description": "Descend into the depths of an alien underwater world filled with wonder and peril. Craft equipment, pilot submarines and out-smart wildlife to explore lush coral reefs, volcanoes, cave systems, and more - all while trying to survive.",
-    "coverUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/header.jpg?t=1777456112",
+    "coverUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/header_schinese.jpg?t=1777456112",
     "posterUrl": "https://cdn.akamai.steamstatic.com/steam/apps/264710/library_600x900.jpg",
     "type": "game",
     "platform": "steam",
+    "url": "https://store.steampowered.com/app/264710/Subnautica/",
     "localCoverPath": "/generated/game_264710_cover.webp",
     "localPosterPath": "/generated/game_264710_poster.webp"
   },
@@ -32,6 +33,7 @@
     "posterUrl": "https://cdn.akamai.steamstatic.com/steam/apps/870780/library_600x900.jpg",
     "type": "game",
     "platform": "steam",
+    "url": "https://store.steampowered.com/app/870780/____Control_Ultimate_Edition/",
     "localCoverPath": "/generated/game_870780_cover.webp",
     "localPosterPath": "/generated/game_870780_poster.webp"
   }
