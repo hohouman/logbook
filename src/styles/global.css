@@ -535,7 +535,7 @@ img {
 .hero-scroll-link {
   position: absolute;
   left: 50%;
-  bottom: 0.5rem;
+  bottom: 1rem;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
