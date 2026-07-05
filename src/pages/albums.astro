@@ -48,7 +48,7 @@ const albumNotes = albums.length > 0 ? albums : [
     <div class="collection-grid">
       {albumNotes.map((item) => (
         item.url ? (
-          <a href={item.url} target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+          <a href={item.url} target="_blank" style="text-decoration: none; color: inherit;">
             <article class={`entry-card${item.localCoverPath ? ' entry-card--compact' : ''}`}>
               {item.localCoverPath ? (
                 <div class="entry-card__media">

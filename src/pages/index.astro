@@ -117,14 +117,14 @@ function getSocialIcon(platform) {
 
       <div class="social-icon-row" aria-label="社交媒体">
         {socialLinks.map(({ platform, url }) => (
-          <a href={url as string} target="_blank" rel="noopener noreferrer" class="social-icon-button" aria-label={platform} title={platform} key={platform}>
+          <a href={url as string} target="_blank" class="social-icon-button" aria-label={platform} title={platform} key={platform}>
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d={getSocialIcon(platform)} />
             </svg>
           </a>
         ))}
         {externalLinks.map((link) => (
-          <a href={link.href} target="_blank" rel="noopener noreferrer" class="external-link-button">
+          <a href={link.href} target="_blank" class="external-link-button">
             {link.label}
           </a>
         ))}
@@ -158,21 +158,23 @@ function getSocialIcon(platform) {
             {games.length > 0 ? (
               <div class="content-panel__list">
                 {games.map((game) => (
-                  <article class={`showcase-card${game.localPosterPath ? '' : ' showcase-card--wide-media'}`}>
-                    <div class="entry-card__media">
-                      {game.localPosterPath || game.localCoverPath ? <img src={game.localPosterPath || game.localCoverPath} alt={game.title} loading="lazy" /> : null}
-                    </div>
-                    <div class="entry-card__body">
-                      <span class="card-tag">{panelCopy.games.tag}</span>
-                      <h3 class="entry-card__title">{game.title}</h3>
-                      {game.description ? <p class="entry-card__desc">{game.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-                      <div class="entry-card__meta">
-                        <div><strong>Developer:</strong> {Array.isArray(game.developer) ? game.developer.join(', ') : game.developer || 'Unknown'}</div>
-                        <div><strong>Publisher:</strong> {Array.isArray(game.publisher) ? game.publisher.join(', ') : game.publisher || 'Unknown'}</div>
-                        <div><strong>Release:</strong> {game.releaseDate || 'TBA'}</div>
+                  <a href={game.url} target="_blank" style="text-decoration: none; color: inherit;">
+                    <article class={`showcase-card${game.localPosterPath ? '' : ' showcase-card--wide-media'}`}>
+                      <div class="entry-card__media">
+                        {game.localPosterPath || game.localCoverPath ? <img src={game.localPosterPath || game.localCoverPath} alt={game.title} loading="lazy" /> : null}
                       </div>
-                    </div>
-                  </article>
+                      <div class="entry-card__body">
+                        <span class="card-tag">{panelCopy.games.tag}</span>
+                        <h3 class="entry-card__title">{game.title}</h3>
+                        {game.description ? <p class="entry-card__desc">{game.description}</p> : <p class="entry-card__desc">No description provided.</p>}
+                        <div class="entry-card__meta">
+                          <div><strong>Developer:</strong> {Array.isArray(game.developer) ? game.developer.join(', ') : game.developer || 'Unknown'}</div>
+                          <div><strong>Publisher:</strong> {Array.isArray(game.publisher) ? game.publisher.join(', ') : game.publisher || 'Unknown'}</div>
+                          <div><strong>Release:</strong> {game.releaseDate || 'TBA'}</div>
+                        </div>
+                      </div>
+                    </article>
+                  </a>
                 ))}
               </div>
             ) : (
@@ -189,20 +191,22 @@ function getSocialIcon(platform) {
             {movies.length > 0 ? (
               <div class="content-panel__list">
                 {movies.map((movie) => (
-                  <article class="showcase-card">
-                    <div class="entry-card__media">
-                      {movie.localCoverPath ? <img src={movie.localCoverPath} alt={movie.title} loading="lazy" /> : null}
-                    </div>
-                    <div class="entry-card__body">
-                      <span class="card-tag">{panelCopy.movies.tag}</span>
-                      <h3 class="entry-card__title">{movie.title}</h3>
-                      {movie.description ? <p class="entry-card__desc">{movie.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-                      <div class="entry-card__meta">
-                        <div><strong>Director:</strong> {Array.isArray(movie.director) ? movie.director.join(', ') : movie.director || 'Unknown'}</div>
-                        <div><strong>Release:</strong> {movie.releaseDate || 'TBA'}</div>
+                  <a href={movie.url} target="_blank" style="text-decoration: none; color: inherit;">
+                    <article class="showcase-card">
+                      <div class="entry-card__media">
+                        {movie.localCoverPath ? <img src={movie.localCoverPath} alt={movie.title} loading="lazy" /> : null}
                       </div>
-                    </div>
-                  </article>
+                      <div class="entry-card__body">
+                        <span class="card-tag">{panelCopy.movies.tag}</span>
+                        <h3 class="entry-card__title">{movie.title}</h3>
+                        {movie.description ? <p class="entry-card__desc">{movie.description}</p> : <p class="entry-card__desc">No description provided.</p>}
+                        <div class="entry-card__meta">
+                          <div><strong>Director:</strong> {Array.isArray(movie.director) ? movie.director.join(', ') : movie.director || 'Unknown'}</div>
+                          <div><strong>Release:</strong> {movie.releaseDate || 'TBA'}</div>
+                        </div>
+                      </div>
+                    </article>
+                  </a>
                 ))}
               </div>
             ) : (
@@ -219,21 +223,23 @@ function getSocialIcon(platform) {
             {books.length > 0 ? (
               <div class="content-panel__list">
                 {books.map((book) => (
-                  <article class="showcase-card">
-                    <div class="entry-card__media">
-                      {book.localCoverPath ? <img src={book.localCoverPath} alt={book.title} loading="lazy" /> : null}
-                    </div>
-                    <div class="entry-card__body">
-                      <span class="card-tag">{panelCopy.books.tag}</span>
-                      <h3 class="entry-card__title">{book.title}</h3>
-                      {book.description ? <p class="entry-card__desc">{book.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-                      <div class="entry-card__meta">
-                        <div><strong>Author:</strong> {Array.isArray(book.author) ? book.author.join(', ') : book.author || (Array.isArray(book.developer) ? book.developer.join(', ') : book.developer) || 'Unknown'}</div>
-                        <div><strong>Publisher:</strong> {Array.isArray(book.publisher) ? book.publisher.join(', ') : book.publisher || 'Unknown'}</div>
-                        <div><strong>Release:</strong> {book.releaseDate || 'TBA'}</div>
+                  <a href={book.url} target="_blank" style="text-decoration: none; color: inherit;">
+                    <article class="showcase-card">
+                      <div class="entry-card__media">
+                        {book.localCoverPath ? <img src={book.localCoverPath} alt={book.title} loading="lazy" /> : null}
                       </div>
-                    </div>
-                  </article>
+                      <div class="entry-card__body">
+                        <span class="card-tag">{panelCopy.books.tag}</span>
+                        <h3 class="entry-card__title">{book.title}</h3>
+                        {book.description ? <p class="entry-card__desc">{book.description}</p> : <p class="entry-card__desc">No description provided.</p>}
+                        <div class="entry-card__meta">
+                          <div><strong>Author:</strong> {Array.isArray(book.author) ? book.author.join(', ') : book.author || (Array.isArray(book.developer) ? book.developer.join(', ') : book.developer) || 'Unknown'}</div>
+                          <div><strong>Publisher:</strong> {Array.isArray(book.publisher) ? book.publisher.join(', ') : book.publisher || 'Unknown'}</div>
+                          <div><strong>Release:</strong> {book.releaseDate || 'TBA'}</div>
+                        </div>
+                      </div>
+                    </article>
+                  </a>
                 ))}
               </div>
             ) : (
@@ -249,19 +255,37 @@ function getSocialIcon(platform) {
             </div>
             <div class="content-panel__notes">
               {albumCards.map((item) => (
-                <article class="showcase-card showcase-card--album">
-                  {item.localCoverPath ? (
-                    <div class="entry-card__media">
-                      <img src={item.localCoverPath} alt={item.title} loading="lazy" />
+                item.url ? (
+                  <a href={item.url} target="_blank" style="text-decoration: none; color: inherit;">
+                    <article class="showcase-card showcase-card--album">
+                      {item.localCoverPath ? (
+                        <div class="entry-card__media">
+                          <img src={item.localCoverPath} alt={item.title} loading="lazy" />
+                        </div>
+                      ) : null}
+                      <div class="entry-card__body">
+                        <span class="card-tag">{panelCopy.albums.tag}</span>
+                        <h3 class="entry-card__title">{item.title}</h3>
+                        {item.artist ? <p class="entry-card__meta-line">{Array.isArray(item.artist) ? item.artist.join(', ') : item.artist}</p> : null}
+                        <p class="entry-card__desc">{item.description || item.desc}</p>
+                      </div>
+                    </article>
+                  </a>
+                ) : (
+                  <article class="showcase-card showcase-card--album">
+                    {item.localCoverPath ? (
+                      <div class="entry-card__media">
+                        <img src={item.localCoverPath} alt={item.title} loading="lazy" />
+                      </div>
+                    ) : null}
+                    <div class="entry-card__body">
+                      <span class="card-tag">{panelCopy.albums.tag}</span>
+                      <h3 class="entry-card__title">{item.title}</h3>
+                      {item.artist ? <p class="entry-card__meta-line">{Array.isArray(item.artist) ? item.artist.join(', ') : item.artist}</p> : null}
+                      <p class="entry-card__desc">{item.description || item.desc}</p>
                     </div>
-                  ) : null}
-                  <div class="entry-card__body">
-                    <span class="card-tag">{panelCopy.albums.tag}</span>
-                    <h3 class="entry-card__title">{item.title}</h3>
-                    {item.artist ? <p class="entry-card__meta-line">{Array.isArray(item.artist) ? item.artist.join(', ') : item.artist}</p> : null}
-                    <p class="entry-card__desc">{item.description || item.desc}</p>
-                  </div>
-                </article>
+                  </article>
+                )
               ))}
             </div>
           </section>

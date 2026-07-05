@@ -30,7 +30,7 @@ const books = Array.isArray(booksData) ? booksData : (booksData.items || []);
     {books.length > 0 ? (
       <div class="collection-grid">
         {books.map((book) => (
-          <a href={book.url} target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+          <a href={book.url} target="_blank" style="text-decoration: none; color: inherit;">
             <article class="entry-card entry-card--compact" key={book.id}>
               <div class="entry-card__media">
                 {book.localCoverPath ? <img src={book.localCoverPath} alt={book.title} loading="lazy" /> : null}

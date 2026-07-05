@@ -30,7 +30,7 @@ const movies = Array.isArray(moviesData) ? moviesData : (moviesData.items || [])
     {movies.length > 0 ? (
       <div class="collection-grid">
         {movies.map((movie) => (
-          <a href={movie.url} target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+          <a href={movie.url} target="_blank" style="text-decoration: none; color: inherit;">
             <article class="entry-card entry-card--compact" key={movie.id}>
               <div class="entry-card__media">
                 {movie.localCoverPath ? <img src={movie.localCoverPath} alt={movie.title} loading="lazy" /> : null}
