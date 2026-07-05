@@ -10,7 +10,7 @@ const movies = Array.isArray(moviesData) ? moviesData : (moviesData.items || [])
   <div slot="hero" class="page-hero">
     <p class="page-kicker">Collection / Movies</p>
     <h1>Movies</h1>
-    <p>把电影记录做成一页带注释的影单，让每部作品都更像一个被妥善归档的瞬间。</p>
+    <p>那些我看过的影片</p>
     <div class="pill-row">
       <span class="stat-chip">{movies.length} items</span>
       <span class="stat-chip">Poster-led cards</span>
@@ -24,7 +24,7 @@ const movies = Array.isArray(moviesData) ? moviesData : (moviesData.items || [])
         <p class="section-eyebrow">Library</p>
         <h2 class="section-title">My Movie Collection</h2>
       </div>
-      <p class="section-lead">更克制的留白和更明确的信息层级，会让影单本身更像一份认真整理过的笔记。</p>
+      <p class="section-lead">那些我看过的影片</p>
     </div>
 
     {movies.length > 0 ? (

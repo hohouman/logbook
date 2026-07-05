@@ -10,7 +10,7 @@ const books = Array.isArray(booksData) ? booksData : (booksData.items || []);
   <div slot="hero" class="page-hero">
     <p class="page-kicker">Collection / Books</p>
     <h1>Books</h1>
-    <p>把读完和在读的书放在同一张桌面上，方便回看自己在什么阶段遇到了什么故事。</p>
+    <p>那些我读过的小说</p>
     <div class="pill-row">
       <span class="stat-chip">{books.length} items</span>
       <span class="stat-chip">Reading shelf</span>
@@ -24,7 +24,7 @@ const books = Array.isArray(booksData) ? booksData : (booksData.items || []);
         <p class="section-eyebrow">Library</p>
         <h2 class="section-title">My Book Collection</h2>
       </div>
-      <p class="section-lead">书单页采用更安静的排版，避免封面之外的元素抢走阅读的注意力。</p>
+      <p class="section-lead">那些我读过的小说</p>
     </div>
 
     {books.length > 0 ? (
@@ -39,7 +39,7 @@ const books = Array.isArray(booksData) ? booksData : (booksData.items || []);
               <h3 class="entry-card__title">{book.title}</h3>
               {book.description ? <p class="entry-card__desc">{book.description}</p> : <p class="entry-card__desc">No description provided.</p>}
               <div class="entry-card__meta">
-                <div><strong>Author:</strong> {Array.isArray(book.developer) ? book.developer.join(', ') : book.developer || 'Unknown'}</div>
+                <div><strong>Author:</strong> {Array.isArray(book.author) ? book.author.join(', ') : book.author || (Array.isArray(book.developer) ? book.developer.join(', ') : book.developer) || 'Unknown'}</div>
                 <div><strong>Publisher:</strong> {Array.isArray(book.publisher) ? book.publisher.join(', ') : book.publisher || 'Unknown'}</div>
                 <div><strong>Release:</strong> {book.releaseDate || 'TBA'}</div>
               </div>

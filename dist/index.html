@@ -1,2 +1,119 @@
-<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Home - undefined</title><meta name="description" content="网名出自我小时候最喜欢的儿童读物，“那是一段小有遗憾的幸福时光”。"><link rel="icon" type="image/x-icon" href="/favicon.ico"><!-- 引入Google Fonts --><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/books.J9upk0dZ.css"><script type="module">async function m(r){try{const t=new Image;return t.crossOrigin="Anonymous",t.src=r,new Promise(e=>{t.onload=()=>{const o=document.createElement("canvas"),n=o.getContext("2d");if(!n){e("#6c5ce7");return}o.width=t.width,o.height=t.height,n.drawImage(t,0,0);const s=n.getImageData(0,0,o.width,o.height).data;let i=0,l=0,d=0,a=0;for(let c=0;c<s.length;c+=4*100)i+=s[c],l+=s[c+1],d+=s[c+2],a++;if(a>0){i=Math.floor(i/a),l=Math.floor(l/a),d=Math.floor(d/a);const c=(i<<16|l<<8|d).toString(16).padStart(6,"0");e(`#${c}`)}else e("#6c5ce7")},t.onerror=()=>{e("#6c5ce7")}})}catch(t){return console.error("Color extraction failed:",t),"#6c5ce7"}}document.addEventListener("DOMContentLoaded",async()=>{const r=document.getElementById("header"),t=document.getElementById("hero-bg"),e=await m("{wallpaper}");if(e&&e!=="#6c5ce7"){document.documentElement.style.setProperty("--dominant-color",e);const o=parseInt(e.slice(1,3),16),n=parseInt(e.slice(3,5),16),g=parseInt(e.slice(5,7),16);document.documentElement.style.setProperty("--dominant-color-rgb",`${o}, ${n}, ${g}`)}window.addEventListener("scroll",()=>{const o=window.scrollY,n=Math.min(o/300,1);t.style.opacity=1-n,t.style.filter=`blur(${n*5}px)`,o>50?(r.style.boxShadow="0 4px 30px rgba(0, 0, 0, 0.3)",r.style.background="rgba(0, 0, 0, 0.8)"):(r.style.boxShadow="none",r.style.background="rgba(0, 0, 0, 0.2)")})});
-</script></head> <body> <div class="hero"> <img src="https://file.houman.top/大神士郎.jpg" alt="背景" class="hero-background" id="hero-bg"> <div class="hero-content">  <div class="hero-text"> <h1>雷顿</h1> <p>网名出自我小时候最喜欢的儿童读物，“那是一段小有遗憾的幸福时光”。</p> <div class="social-links"> <a href="https://github.com/hohouman" target="_blank" rel="noopener noreferrer" class="btn btn-outline" key="github"> Github </a><a href="ho@houman.top" target="_blank" rel="noopener noreferrer" class="btn btn-outline" key="email"> Email </a><a href="" target="_blank" rel="noopener noreferrer" class="btn btn-outline" key="twitter"> Twitter </a><a href="" target="_blank" rel="noopener noreferrer" class="btn btn-outline" key="instagram"> Instagram </a><a href="" target="_blank" rel="noopener noreferrer" class="btn btn-outline" key="telegram"> Telegram </a><a href="" target="_blank" rel="noopener noreferrer" class="btn btn-outline" key="facebook"> Facebook </a> </div> </div>  </div> </div> <header class="header" id="header"> <a href="/" class="logo"></a> <nav class="nav-links"> <a href="/games" class="nav-link">游戏</a> <a href="/movies" class="nav-link">电影</a> <a href="/books" class="nav-link">书籍</a> <a href="/other" class="nav-link">其他</a> </nav> </header> <main class="main-content"> <div id="page-content">   <div class="nav-tabs"> <a href="/games" class="nav-tab">Games</a> <a href="/movies" class="nav-tab">Movies</a> <a href="/books" class="nav-tab">Books</a> <a href="/other" class="nav-tab">Other</a> </div>   </div> </main> <footer class="footer"> <p>&copy; 2026 雷顿. Powered by <a href="https://github.com/hohouman/logbook">logbook</a> · Hosted on Cloudflare</p> </footer>  </body> </html>
+<!DOCTYPE html><html lang="zh-CN"> <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Home - 雷顿</title><meta name="description" content="网名出自我小时候最喜欢的儿童读物，“那是一段小有遗憾的幸福时光”。"><meta property="og:title" content="Home - 雷顿"><meta property="og:description" content="网名出自我小时候最喜欢的儿童读物，“那是一段小有遗憾的幸福时光”。"><link rel="icon" type="image/x-icon" href="/favicon.ico"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/_astro/albums.DTJayy-k.css"><script type="module">const c=document.querySelector("[data-content-viewer]"),n=Array.from(document.querySelectorAll("[data-view]")),o=Array.from(document.querySelectorAll("[data-panel]"));if(c&&n.length&&o.length){const a=n.map(e=>e.dataset.view),r=e=>{n.forEach(t=>{const s=t.dataset.view===e;t.setAttribute("aria-selected",s?"true":"false")}),o.forEach(t=>{t.dataset.active=t.dataset.panel===e?"true":"false"}),c.dataset.activeView=e},d=()=>c.dataset.activeView||"games",i=e=>{const t=d(),s=a.indexOf(t),l=e==="next"?(s+1)%a.length:(s-1+a.length)%a.length;r(a[l]||"games")};n.forEach(e=>{e.addEventListener("click",()=>r(e.dataset.view||"games"))}),c.querySelectorAll("[data-step]").forEach(e=>{e.addEventListener("click",()=>i(e.dataset.step))}),r("games")}
+</script></head> <body> <div class="site-shell"> <section class="hero-banner hero-banner--fullscreen"> <img src="https://file.houman.top/大神士郎.jpg" alt="背景封面" class="hero-banner-image"> <div class="hero-banner-overlay"></div> <div class="hero-banner-content hero-banner-content--landing"> <div class="landing-hero"> <section class="profile-panel profile-panel--landing"> <div class="profile-panel__badge">Personal homepage</div> <div class="profile-panel__header"> <img src="https://file.houman.top/leidun.png" alt="雷顿" class="profile-avatar"> <div> <p class="page-kicker page-kicker--hero">Personal logbook</p> <h1 class="landing-title">雷顿</h1> </div> </div> <p class="landing-bio">网名出自我小时候最喜欢的儿童读物，“那是一段小有遗憾的幸福时光”。</p> <div class="social-icon-row" aria-label="社交媒体"> <a href="https://github.com/hohouman" target="_blank" rel="noopener noreferrer" class="social-icon-button" aria-label="github" title="github" key="github"> <svg viewBox="0 0 24 24" aria-hidden="true"> <path d="M12 2C6.5 2 2 6.5 2 12.2c0 4.6 3 8.4 7.1 9.8.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.1-1.6-1.1-1.6-.9-.7.1-.7.1-.7 1 .1 1.6 1.1 1.6 1.1.9 1.5 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.5 0-1.2.4-2.1 1.1-2.9-.1-.3-.5-1.4.1-2.8 0 0 .9-.3 2.9 1.1.8-.2 1.7-.4 2.6-.4s1.8.1 2.6.4c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.5.1 2.8.7.8 1.1 1.7 1.1 2.9 0 4.3-2.4 5.2-4.7 5.5.4.4.8 1 .8 2v2.9c0 .3.2.6.7.5 4.1-1.4 7.1-5.2 7.1-9.8C22 6.5 17.5 2 12 2Z"></path> </svg> </a><a href="mailto:ho@houman.top" target="_blank" rel="noopener noreferrer" class="social-icon-button" aria-label="email" title="email" key="email"> <svg viewBox="0 0 24 24" aria-hidden="true"> <path d="M4 6.5h16c.8 0 1.5.7 1.5 1.5v8c0 .8-.7 1.5-1.5 1.5H4c-.8 0-1.5-.7-1.5-1.5V8c0-.8.7-1.5 1.5-1.5Zm0 1.6v.2l8 5.1 8-5.1v-.2H4Zm16 8.8V10l-7.6 4.8c-.2.1-.5.1-.8 0L4 10v6.9h16Z"></path> </svg> </a> <a href="https://blog.houman.top" target="_blank" rel="noopener noreferrer" class="external-link-button"> 我的博客 </a><a href="https://9sing.houman.top" target="_blank" rel="noopener noreferrer" class="external-link-button"> 我的大音劲 </a> </div> </section> <a href="#content-tabs" class="hero-scroll-link" aria-label="滚动到下一页"> <span class="hero-scroll-link__label">Scroll</span> <span class="hero-scroll-link__arrow" aria-hidden="true">↓</span> </a> </div> </div> </section> <main class="page-main page-main--landing">  <div class="page-frame page-frame--landing">   <section class="stack home-stage" id="collections"> <div class="content-stage"> <div class="content-tabs" id="content-tabs" role="tablist" aria-label="内容切换"> <button type="button" class="content-tab" role="tab" aria-selected="true" data-view="games"> 游戏 </button><button type="button" class="content-tab" role="tab" aria-selected="false" data-view="movies"> 电影 </button><button type="button" class="content-tab" role="tab" aria-selected="false" data-view="books"> 书籍 </button><button type="button" class="content-tab" role="tab" aria-selected="false" data-view="albums"> 专辑 </button><button type="button" class="content-tab" role="tab" aria-selected="false" data-view="other"> 其他 </button> </div> <div class="content-viewer" data-content-viewer> <div class="content-viewer__panels"> <section class="content-panel" data-panel="games" data-active="true"> <div class="content-panel__summary"> <p class="section-eyebrow">Games</p> <h3>那些我玩过的游戏</h3> <p>封面、游玩平台和发行信息放在一起，像一排可以随手翻看的游戏盒。</p> </div> <div class="content-panel__list"> <article class="showcase-card showcase-card--wide-media"> <div class="entry-card__media"> <img src="/generated/game_264710_cover.webp" alt="Subnautica" loading="lazy"> </div> <div class="entry-card__body"> <span class="card-tag">Game</span> <h3 class="entry-card__title">Subnautica</h3> <p class="entry-card__desc">Descend into the depths of an alien underwater world filled with wonder and peril. Craft equipment, pilot submarines and out-smart wildlife to explore lush coral reefs, volcanoes, cave systems, and more - all while trying to survive.</p> <div class="entry-card__meta"> <div><strong>Developer:</strong> Unknown Worlds Entertainment</div> <div><strong>Publisher:</strong> Unknown Worlds Entertainment</div> <div><strong>Release:</strong> Jan 23, 2018</div> </div> </div> </article> </div> </section> <section class="content-panel" data-panel="movies"> <div class="content-panel__summary"> <p class="section-eyebrow">Movies</p> <h3>那些我看过的影片</h3> <p>把海报和导演信息靠前，让每部影片先以它自己的画面被看见。</p> </div> <div class="empty-state">No movies added yet. Check back later!</div> </section> <section class="content-panel" data-panel="books"> <div class="content-panel__summary"> <p class="section-eyebrow">Books</p> <h3>那些我读过的小说</h3> <p>像书架一样陈列封面、作者和出版时间，安静但容易回看。</p> </div> <div class="content-panel__list"> <article class="showcase-card"> <div class="entry-card__media">  </div> <div class="entry-card__body"> <span class="card-tag">Book</span> <h3 class="entry-card__title">寒武再临</h3> <p class="entry-card__desc">No description provided.</p> <div class="entry-card__meta"> <div><strong>Author:</strong> Unknown</div> <div><strong>Publisher:</strong> </div> <div><strong>Release:</strong> 2014-12</div> </div> </div> </article> </div> </section> <section class="content-panel" data-panel="albums"> <div class="content-panel__summary"> <p class="section-eyebrow">Albums</p> <h3>那些我爱听的CD</h3> <p>唱片封面、歌手和发行信息并排呈现，保留一点翻专辑的感觉。</p> </div> <div class="content-panel__notes"> <article class="showcase-card showcase-card--album">  <div class="entry-card__body"> <span class="card-tag">Album</span> <h3 class="entry-card__title">正在循环</h3> <p class="entry-card__meta-line">Personal note</p> <p class="entry-card__desc">这里以后可以放最近听得最多的专辑、歌单或者一些值得反复回听的作品。</p> </div> </article><article class="showcase-card showcase-card--album">  <div class="entry-card__body"> <span class="card-tag">Album</span> <h3 class="entry-card__title">喜欢的声音</h3> <p class="entry-card__meta-line">Personal note</p> <p class="entry-card__desc">偏爱的风格、制作人的名字、某种总会被我反复记住的气质。</p> </div> </article><article class="showcase-card showcase-card--album">  <div class="entry-card__body"> <span class="card-tag">Album</span> <h3 class="entry-card__title">听歌记录</h3> <p class="entry-card__meta-line">Personal note</p> <p class="entry-card__desc">我会把专辑页当作比歌单更安静的一种笔记空间。</p> </div> </article> </div> </section> <section class="content-panel" data-panel="other"> <div class="content-panel__summary"> <p class="section-eyebrow">Other</p> <h3>看起来，你想要更加了解我……</h3> <p>那些不适合被放进固定分类里的内容，就先收在这里。</p> </div> <div class="prose-card"> <h1 id="other-interests">Other Interests</h1>
+<p>This section contains various other things I’m interested in beyond games, movies, and books.</p>
+<h2 id="music">Music</h2>
+<p>Some of my favorite albums and artists that have shaped my musical taste.</p>
+<h2 id="travel">Travel</h2>
+<p>Places I’ve visited and dream destinations I hope to explore.</p>
+<h2 id="tech">Tech</h2>
+<p>Latest gadgets, software, and technological innovations I find fascinating.</p>
+<h3 id="music-1">Music</h3>
+<p>I enjoy exploring different music genres, from classical to electronic. Some of my favorite artists include:</p>
+<ul>
+<li><a href="https://music.example.com/artist">Artist Example</a></li>
+<li><a href="https://music.example.com/another-artist">Another Artist</a></li>
+</ul>
+<h3 id="travel-1">Travel</h3>
+<p>Traveling allows me to experience different cultures and broaden my perspectives. Here are some places I’d love to visit:</p>
+<ul>
+<li>Japan for its rich culture and technology</li>
+<li>Iceland for its stunning landscapes</li>
+<li>Italy for art and cuisine</li>
+</ul>
+<h3 id="photography">Photography</h3>
+<p>Capturing moments and telling stories through photos is a passion of mine. I primarily shoot landscapes and street photography.</p> </div> </section> </div> <div class="content-panel__controls"> <button type="button" class="content-nav-button" data-step="prev" aria-label="上一项">←</button> <button type="button" class="content-nav-button" data-step="next" aria-label="下一项">→</button> </div> </div> </div> </section>  </div> </main> <footer class="site-footer"> <p>&copy; 2026 雷顿. Powered by <a href="https://github.com/hohouman/logbook">logbook</a> · Hosted on Cloudflare</p> </footer> </div> <script>(function(){const heroWallpaper = "https://file.houman.top/大神士郎.jpg";
+
+      const root = document.documentElement;
+
+      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+      const hexToRgb = (hex) => {
+        const normalized = hex.replace('#', '');
+        if (normalized.length !== 6) {
+          return null;
+        }
+
+        return {
+          r: Number.parseInt(normalized.slice(0, 2), 16),
+          g: Number.parseInt(normalized.slice(2, 4), 16),
+          b: Number.parseInt(normalized.slice(4, 6), 16),
+        };
+      };
+
+      const rgbToHex = (r, g, b) =>
+        `#${[r, g, b]
+          .map((value) => Math.round(clamp(value, 0, 255)).toString(16).padStart(2, '0'))
+          .join('')}`;
+
+      const sampleThemeColor = async (url) => {
+        try {
+          const image = new Image();
+          image.crossOrigin = 'anonymous';
+          image.src = url;
+
+          await new Promise((resolve, reject) => {
+            image.onload = resolve;
+            image.onerror = reject;
+          });
+
+          const canvas = document.createElement('canvas');
+          const context = canvas.getContext('2d');
+          if (!context) {
+            return '#8f4e2b';
+          }
+
+          const size = 64;
+          canvas.width = size;
+          canvas.height = size;
+          context.drawImage(image, 0, 0, size, size);
+
+          const { data } = context.getImageData(0, 0, size, size);
+          let red = 0;
+          let green = 0;
+          let blue = 0;
+          let count = 0;
+
+          for (let index = 0; index < data.length; index += 16) {
+            red += data[index];
+            green += data[index + 1];
+            blue += data[index + 2];
+            count += 1;
+          }
+
+          if (count === 0) {
+            return '#8f4e2b';
+          }
+
+          return rgbToHex(red / count, green / count, blue / count);
+        } catch {
+          return '#8f4e2b';
+        }
+      };
+
+      const updateHeroOpacity = () => {
+        const limit = Math.max(window.innerHeight * 0.9, 1);
+        const value = Math.max(0.28, 1 - window.scrollY / limit);
+        root.style.setProperty('--hero-opacity', String(value));
+      };
+
+      const applyThemeColor = async () => {
+        const color = await sampleThemeColor(heroWallpaper);
+        const rgb = hexToRgb(color);
+        if (!rgb) {
+          return;
+        }
+
+        root.style.setProperty('--theme-color', color);
+        root.style.setProperty('--theme-color-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+        root.style.setProperty('--theme-surface', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.14)`);
+        root.style.setProperty('--theme-surface-strong', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.24)`);
+      };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        applyThemeColor();
+        updateHeroOpacity();
+      }, { once: true });
+
+      window.addEventListener('scroll', updateHeroOpacity, { passive: true });
+      window.addEventListener('resize', updateHeroOpacity);
+    })();</script> </body> </html> 

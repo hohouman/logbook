@@ -1,19 +1,25 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import profile from '../config/profile.json';
+import albumsData from '../content/_generated/albums.json';
 
-const albumNotes = [
+const albums = Array.isArray(albumsData) ? albumsData : (albumsData.items || []);
+
+const albumNotes = albums.length > 0 ? albums : [
   {
     title: '正在循环',
-    desc: '这里以后可以放最近听得最多的专辑、歌单或者一些值得反复回听的作品。',
+    artist: 'Personal note',
+    description: '这里以后可以放最近听得最多的专辑、歌单或者一些值得反复回听的作品。',
   },
   {
     title: '喜欢的声音',
-    desc: '偏爱的风格、制作人的名字、某种总会被我反复记住的气质。',
+    artist: 'Personal note',
+    description: '偏爱的风格、制作人的名字、某种总会被我反复记住的气质。',
   },
   {
     title: '听歌记录',
-    desc: '我会把专辑页当作比歌单更安静的一种笔记空间。',
+    artist: 'Personal note',
+    description: '我会把专辑页当作比歌单更安静的一种笔记空间。',
   },
 ];
 ---
@@ -22,7 +28,7 @@ const albumNotes = [
   <div slot="hero" class="page-hero">
     <p class="page-kicker">Collection / Albums</p>
     <h1>Albums</h1>
-    <p>这是一页关于专辑和声音的私人笔记。它比歌单更安静，比自我介绍更直接。</p>
+    <p>那些我爱听的CD</p>
     <div class="pill-row">
       <span class="stat-chip">Music notes</span>
       <span class="stat-chip">Listening log</span>
@@ -36,16 +42,22 @@ const albumNotes = [
         <p class="section-eyebrow">Music</p>
         <h2 class="section-title">My Album Notes</h2>
       </div>
-      <p class="section-lead">暂时先用一页干净的音乐笔记承接专辑内容，后面如果你有具体专辑清单，可以继续往这里填充。</p>
+      <p class="section-lead">那些我爱听的CD</p>
     </div>
 
     <div class="collection-grid">
       {albumNotes.map((item) => (
-        <article class="entry-card entry-card--compact">
+        <article class={`entry-card${item.localCoverPath ? ' entry-card--compact' : ''}`}>
+          {item.localCoverPath ? (
+            <div class="entry-card__media">
+              <img src={item.localCoverPath} alt={item.title} loading="lazy" />
+            </div>
+          ) : null}
           <div class="entry-card__body">
             <span class="card-tag">Album</span>
             <h3 class="entry-card__title">{item.title}</h3>
-            <p class="entry-card__desc">{item.desc}</p>
+            {item.artist ? <p class="entry-card__meta-line">{Array.isArray(item.artist) ? item.artist.join(', ') : item.artist}</p> : null}
+            <p class="entry-card__desc">{item.description || item.desc}</p>
           </div>
         </article>
       ))}

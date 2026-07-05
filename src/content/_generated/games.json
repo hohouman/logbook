@@ -11,8 +11,9 @@
     "releaseDate": "Jan 23, 2018",
     "description": "Descend into the depths of an alien underwater world filled with wonder and peril. Craft equipment, pilot submarines and out-smart wildlife to explore lush coral reefs, volcanoes, cave systems, and more - all while trying to survive.",
     "coverUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/264710/header.jpg?t=1777456112",
+    "posterUrl": "https://cdn.akamai.steamstatic.com/steam/apps/264710/library_600x900.jpg",
     "type": "game",
     "platform": "steam",
-    "localCoverPath": "/src/content/_generated/game_264710_cover.webp"
+    "localCoverPath": "/generated/game_264710_cover.webp"
   }
 ]

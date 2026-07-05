@@ -10,7 +10,7 @@ const games = Array.isArray(gamesData) ? gamesData : (gamesData.items || []);
   <div slot="hero" class="page-hero">
     <p class="page-kicker">Collection / Games</p>
     <h1>Games</h1>
-    <p>把正在玩、想补完和已经通关的游戏放进同一个更有秩序的清单里。</p>
+    <p>那些我玩过的游戏</p>
     <div class="pill-row">
       <span class="stat-chip">{games.length} items</span>
       <span class="stat-chip">Steam / Epic</span>
@@ -24,15 +24,15 @@ const games = Array.isArray(gamesData) ? gamesData : (gamesData.items || []);
         <p class="section-eyebrow">Library</p>
         <h2 class="section-title">My Game Collection</h2>
       </div>
-      <p class="section-lead">封面、简介和发行信息采用同一节奏，减少噪音，突出作品本身。</p>
+      <p class="section-lead">那些我玩过的游戏</p>
     </div>
 
     {games.length > 0 ? (
       <div class="collection-grid">
         {games.map((game) => (
-          <article class="entry-card entry-card--compact" key={game.id}>
+          <article class={`entry-card entry-card--compact${game.localPosterPath ? '' : ' entry-card--wide-media'}`} key={game.id}>
             <div class="entry-card__media">
-              {game.localCoverPath ? <img src={game.localCoverPath} alt={game.title} loading="lazy" /> : null}
+              {game.localPosterPath || game.localCoverPath ? <img src={game.localPosterPath || game.localCoverPath} alt={game.title} loading="lazy" /> : null}
             </div>
             <div class="entry-card__body">
               <span class="card-tag">Game</span>

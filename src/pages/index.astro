@@ -7,13 +7,15 @@ import profile from '../config/profile.json';
 import gamesData from '../content/_generated/games.json';
 import moviesData from '../content/_generated/movies.json';
 import booksData from '../content/_generated/books.json';
+import albumsData from '../content/_generated/albums.json';
 import OtherContent from '../content/posts/other.md';
 
 const games = Array.isArray(gamesData) ? gamesData : (gamesData.items || []);
 const movies = Array.isArray(moviesData) ? moviesData : (moviesData.items || []);
 const books = Array.isArray(booksData) ? booksData : (booksData.items || []);
+const albums = Array.isArray(albumsData) ? albumsData : (albumsData.items || []);
 
-const albumNotes = [
+const fallbackAlbumNotes = [
   {
     title: '正在循环',
     desc: '这里以后可以放最近听得最多的专辑、歌单或者一些值得反复回听的作品。',
@@ -28,15 +30,25 @@ const albumNotes = [
   },
 ];
 
-const collections = [
-  { href: '/games', title: 'Games', desc: '正在游玩的世界、沉迷的系统与难忘的关卡。' },
-  { href: '/movies', title: 'Movies', desc: '观影记录与那些会在脑子里停留很久的镜头。' },
-  { href: '/books', title: 'Books', desc: '读过的故事、人物和对日常的温柔改写。' },
-  { href: '/albums', title: 'Albums', desc: '正在循环的旋律、专辑和耳机里的一点点日常。' },
-  { href: '/other', title: 'Other', desc: '音乐、旅途、技术与一些没有被归类的热爱。' },
+const albumCards = albums.length > 0 ? albums : fallbackAlbumNotes.map((item, index) => ({
+  id: `album-note-${index}`,
+  title: item.title,
+  artist: 'Personal note',
+  description: item.desc,
+  type: 'album',
+}));
+
+const externalLinks = [
+  { href: 'https://blog.houman.top', label: '我的博客' },
+  { href: 'https://9sing.houman.top', label: '我的大音劲' },
 ];
 
-const socialLinks = Object.entries(profile.social).filter(([, url]) => Boolean(url));
+const socialLinks = Object.entries(profile.social)
+  .filter(([, url]) => Boolean(url))
+  .map(([platform, url]) => ({
+    platform,
+    url: platform === 'email' && typeof url === 'string' && !url.startsWith('mailto:') ? `mailto:${url}` : url,
+  }));
 
 const viewerTabs = [
   { key: 'games', label: '游戏' },
@@ -45,6 +57,38 @@ const viewerTabs = [
   { key: 'albums', label: '专辑' },
   { key: 'other', label: '其他' },
 ];
+
+const panelCopy = {
+  games: {
+    eyebrow: 'Games',
+    title: '那些我玩过的游戏',
+    desc: '封面、游玩平台和发行信息放在一起，像一排可以随手翻看的游戏盒。',
+    tag: 'Game',
+  },
+  movies: {
+    eyebrow: 'Movies',
+    title: '那些我看过的影片',
+    desc: '把海报和导演信息靠前，让每部影片先以它自己的画面被看见。',
+    tag: 'Movie',
+  },
+  books: {
+    eyebrow: 'Books',
+    title: '那些我读过的小说',
+    desc: '像书架一样陈列封面、作者和出版时间，安静但容易回看。',
+    tag: 'Book',
+  },
+  albums: {
+    eyebrow: 'Albums',
+    title: '那些我爱听的CD',
+    desc: '唱片封面、歌手和发行信息并排呈现，保留一点翻专辑的感觉。',
+    tag: 'Album',
+  },
+  other: {
+    eyebrow: 'Other',
+    title: '看起来，你想要更加了解我……',
+    desc: '那些不适合被放进固定分类里的内容，就先收在这里。',
+  },
+};
 
 const iconPaths = {
   github: 'M12 2C6.5 2 2 6.5 2 12.2c0 4.6 3 8.4 7.1 9.8.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.1-1.6-1.1-1.6-.9-.7.1-.7.1-.7 1 .1 1.6 1.1 1.6 1.1.9 1.5 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.5 0-1.2.4-2.1 1.1-2.9-.1-.3-.5-1.4.1-2.8 0 0 .9-.3 2.9 1.1.8-.2 1.7-.4 2.6-.4s1.8.1 2.6.4c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.5.1 2.8.7.8 1.1 1.7 1.1 2.9 0 4.3-2.4 5.2-4.7 5.5.4.4.8 1 .8 2v2.9c0 .3.2.6.7.5 4.1-1.4 7.1-5.2 7.1-9.8C22 6.5 17.5 2 12 2Z',
@@ -72,11 +116,16 @@ function getSocialIcon(platform) {
       <p class="landing-bio">{profile.bio}</p>
 
       <div class="social-icon-row" aria-label="社交媒体">
-        {socialLinks.map(([platform, url]) => (
+        {socialLinks.map(({ platform, url }) => (
           <a href={url as string} target="_blank" rel="noopener noreferrer" class="social-icon-button" aria-label={platform} title={platform} key={platform}>
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d={getSocialIcon(platform)} />
             </svg>
+          </a>
+        ))}
+        {externalLinks.map((link) => (
+          <a href={link.href} target="_blank" rel="noopener noreferrer" class="external-link-button">
+            {link.label}
           </a>
         ))}
       </div>
@@ -102,19 +151,19 @@ function getSocialIcon(platform) {
         <div class="content-viewer__panels">
           <section class="content-panel" data-panel="games" data-active="true">
             <div class="content-panel__summary">
-              <p class="section-eyebrow">Games</p>
-              <h3>My Game Collection</h3>
-              <p>把正在玩、想补完和已经通关的游戏放进同一个更有秩序的清单里。</p>
+              <p class="section-eyebrow">{panelCopy.games.eyebrow}</p>
+              <h3>{panelCopy.games.title}</h3>
+              <p>{panelCopy.games.desc}</p>
             </div>
             {games.length > 0 ? (
               <div class="content-panel__list">
                 {games.map((game) => (
-                  <article class="entry-card entry-card--compact">
+                  <article class={`showcase-card${game.localPosterPath ? '' : ' showcase-card--wide-media'}`}>
                     <div class="entry-card__media">
-                      {game.localCoverPath ? <img src={game.localCoverPath} alt={game.title} loading="lazy" /> : null}
+                      {game.localPosterPath || game.localCoverPath ? <img src={game.localPosterPath || game.localCoverPath} alt={game.title} loading="lazy" /> : null}
                     </div>
                     <div class="entry-card__body">
-                      <span class="card-tag">Game</span>
+                      <span class="card-tag">{panelCopy.games.tag}</span>
                       <h3 class="entry-card__title">{game.title}</h3>
                       {game.description ? <p class="entry-card__desc">{game.description}</p> : <p class="entry-card__desc">No description provided.</p>}
                       <div class="entry-card__meta">
@@ -133,19 +182,19 @@ function getSocialIcon(platform) {
 
           <section class="content-panel" data-panel="movies">
             <div class="content-panel__summary">
-              <p class="section-eyebrow">Movies</p>
-              <h3>My Movie Collection</h3>
-              <p>更克制的留白和更明确的信息层级，会让影单本身更像一份认真整理过的笔记。</p>
+              <p class="section-eyebrow">{panelCopy.movies.eyebrow}</p>
+              <h3>{panelCopy.movies.title}</h3>
+              <p>{panelCopy.movies.desc}</p>
             </div>
             {movies.length > 0 ? (
               <div class="content-panel__list">
                 {movies.map((movie) => (
-                  <article class="entry-card entry-card--compact">
+                  <article class="showcase-card">
                     <div class="entry-card__media">
                       {movie.localCoverPath ? <img src={movie.localCoverPath} alt={movie.title} loading="lazy" /> : null}
                     </div>
                     <div class="entry-card__body">
-                      <span class="card-tag">Movie</span>
+                      <span class="card-tag">{panelCopy.movies.tag}</span>
                       <h3 class="entry-card__title">{movie.title}</h3>
                       {movie.description ? <p class="entry-card__desc">{movie.description}</p> : <p class="entry-card__desc">No description provided.</p>}
                       <div class="entry-card__meta">
@@ -163,23 +212,23 @@ function getSocialIcon(platform) {
 
           <section class="content-panel" data-panel="books">
             <div class="content-panel__summary">
-              <p class="section-eyebrow">Books</p>
-              <h3>My Book Collection</h3>
-              <p>书单页采用更安静的排版，避免封面之外的元素抢走阅读的注意力。</p>
+              <p class="section-eyebrow">{panelCopy.books.eyebrow}</p>
+              <h3>{panelCopy.books.title}</h3>
+              <p>{panelCopy.books.desc}</p>
             </div>
             {books.length > 0 ? (
               <div class="content-panel__list">
                 {books.map((book) => (
-                  <article class="entry-card entry-card--compact">
+                  <article class="showcase-card">
                     <div class="entry-card__media">
                       {book.localCoverPath ? <img src={book.localCoverPath} alt={book.title} loading="lazy" /> : null}
                     </div>
                     <div class="entry-card__body">
-                      <span class="card-tag">Book</span>
+                      <span class="card-tag">{panelCopy.books.tag}</span>
                       <h3 class="entry-card__title">{book.title}</h3>
                       {book.description ? <p class="entry-card__desc">{book.description}</p> : <p class="entry-card__desc">No description provided.</p>}
                       <div class="entry-card__meta">
-                        <div><strong>Author:</strong> {Array.isArray(book.developer) ? book.developer.join(', ') : book.developer || 'Unknown'}</div>
+                        <div><strong>Author:</strong> {Array.isArray(book.author) ? book.author.join(', ') : book.author || (Array.isArray(book.developer) ? book.developer.join(', ') : book.developer) || 'Unknown'}</div>
                         <div><strong>Publisher:</strong> {Array.isArray(book.publisher) ? book.publisher.join(', ') : book.publisher || 'Unknown'}</div>
                         <div><strong>Release:</strong> {book.releaseDate || 'TBA'}</div>
                       </div>
@@ -194,17 +243,23 @@ function getSocialIcon(platform) {
 
           <section class="content-panel" data-panel="albums">
             <div class="content-panel__summary">
-              <p class="section-eyebrow">Albums</p>
-              <h3>My Album Notes</h3>
-              <p>这是一页关于专辑和声音的私人笔记。它比歌单更安静，比自我介绍更直接。</p>
+              <p class="section-eyebrow">{panelCopy.albums.eyebrow}</p>
+              <h3>{panelCopy.albums.title}</h3>
+              <p>{panelCopy.albums.desc}</p>
             </div>
             <div class="content-panel__notes">
-              {albumNotes.map((item) => (
-                <article class="entry-card entry-card--compact">
+              {albumCards.map((item) => (
+                <article class="showcase-card showcase-card--album">
+                  {item.localCoverPath ? (
+                    <div class="entry-card__media">
+                      <img src={item.localCoverPath} alt={item.title} loading="lazy" />
+                    </div>
+                  ) : null}
                   <div class="entry-card__body">
-                    <span class="card-tag">Album</span>
+                    <span class="card-tag">{panelCopy.albums.tag}</span>
                     <h3 class="entry-card__title">{item.title}</h3>
-                    <p class="entry-card__desc">{item.desc}</p>
+                    {item.artist ? <p class="entry-card__meta-line">{Array.isArray(item.artist) ? item.artist.join(', ') : item.artist}</p> : null}
+                    <p class="entry-card__desc">{item.description || item.desc}</p>
                   </div>
                 </article>
               ))}
@@ -213,9 +268,9 @@ function getSocialIcon(platform) {
 
           <section class="content-panel" data-panel="other">
             <div class="content-panel__summary">
-              <p class="section-eyebrow">Other</p>
-              <h3>My Other Interests</h3>
-              <p>不想塞进游戏、电影或书籍里的内容，最终都收拢到这个更自由的分区。</p>
+              <p class="section-eyebrow">{panelCopy.other.eyebrow}</p>
+              <h3>{panelCopy.other.title}</h3>
+              <p>{panelCopy.other.desc}</p>
             </div>
             <div class="prose-card">
               <OtherContent />
@@ -236,13 +291,6 @@ function getSocialIcon(platform) {
   const viewer = document.querySelector('[data-content-viewer]');
   const tabs = Array.from(document.querySelectorAll('[data-view]'));
   const panels = Array.from(document.querySelectorAll('[data-panel]'));
-  const labelByKey = {
-    games: '游戏',
-    movies: '电影',
-    books: '书籍',
-    albums: '专辑',
-    other: '其他',
-  };
 
   if (viewer && tabs.length && panels.length) {
     const keys = tabs.map((tab) => tab.dataset.view);

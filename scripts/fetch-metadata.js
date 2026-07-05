@@ -12,9 +12,11 @@ const __dirname = path.dirname(__filename);
 const CONTENT_DIR = path.join(__dirname, '../src/content');
 const CONFIG_DIR = path.join(__dirname, '../src/config'); // 修改为新的config目录
 const GENERATED_DIR = path.join(CONTENT_DIR, '_generated');
+const PUBLIC_GENERATED_DIR = path.join(__dirname, '../public/generated');
 
 // 确保生成目录存在
 await fs.mkdir(GENERATED_DIR, { recursive: true });
+await fs.mkdir(PUBLIC_GENERATED_DIR, { recursive: true });
 
 /**
  * 从Steam API获取游戏数据
@@ -38,6 +40,7 @@ async function getSteamData(appId) {
       releaseDate: appData.release_date.date,
       description: appData.short_description,
       coverUrl: appData.header_image,
+      posterUrl: `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/library_600x900.jpg`,
       type: 'game',
       platform: 'steam'
     };
@@ -99,7 +102,8 @@ async function getDoubanData(doubanId, type) {
     const page = await browser.newPage();
     
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36');
-    await page.goto(`https://${type === 'movie' ? 'movie' : 'book'}.douban.com/subject/${doubanId}/`, { 
+    const host = type === 'movie' ? 'movie' : type === 'book' ? 'book' : 'music';
+    await page.goto(`https://${host}.douban.com/subject/${doubanId}/`, { 
       waitUntil: 'networkidle2',
       timeout: 30000 
     });
@@ -129,6 +133,8 @@ async function getDoubanData(doubanId, type) {
       let director = [];
       let actors = [];
       let author = [];
+      let artist = [];
+      let publisher = [];
 
       if (type === 'movie') {
         // 提取电影信息
@@ -151,7 +157,20 @@ async function getDoubanData(doubanId, type) {
         
         const authorMatch = infoText.match(/作者:\s*([^\n\r]+)/);
         if (authorMatch) {
-          author = authorMatch[1].split('/');
+          author = authorMatch[1].split('/').map(item => item.trim()).filter(Boolean);
+        }
+      } else if (type === 'album') {
+        const dateMatch = infoText.match(/发行时间:\s*([^\n\r]+)/);
+        releaseDate = dateMatch ? dateMatch[1].trim() : '';
+
+        const artistMatch = infoText.match(/表演者:\s*([^\n\r]+)/);
+        if (artistMatch) {
+          artist = artistMatch[1].split('/').map(item => item.trim()).filter(Boolean);
+        }
+
+        const publisherMatch = infoText.match(/出版者:\s*([^\n\r]+)/);
+        if (publisherMatch) {
+          publisher = [publisherMatch[1].trim()];
         }
       }
 
@@ -164,6 +183,8 @@ async function getDoubanData(doubanId, type) {
         director: director,
         actors: actors,
         author: author,
+        artist: artist,
+        publisher: publisher,
         description: desc,
       };
     }, type);
@@ -179,7 +200,10 @@ async function getDoubanData(doubanId, type) {
       id: doubanId,
       title: data.title,
       developer: data.director || data.author || [],
-      publisher: [],
+      director: data.director || [],
+      author: data.author || [],
+      artist: data.artist || [],
+      publisher: data.publisher || [],
       releaseDate: data.releaseDate,
       description: data.description,
       coverUrl: data.coverUrl,
@@ -193,9 +217,49 @@ async function getDoubanData(doubanId, type) {
 }
 
 /**
+ * 从MusicBrainz和Cover Art Archive获取专辑数据
+ */
+async function getMusicBrainzAlbumData(releaseId) {
+  try {
+    const response = await fetch(`https://musicbrainz.org/ws/2/release/${releaseId}?inc=artist-credits+labels&fmt=json`, {
+      headers: {
+        'User-Agent': 'logbook/1.0.0 (https://houman.top)'
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const artist = (data['artist-credit'] || [])
+      .map((item) => item.name)
+      .filter(Boolean);
+    const publisher = (data['label-info'] || [])
+      .map((item) => item.label?.name)
+      .filter(Boolean);
+
+    return {
+      id: releaseId,
+      title: data.title,
+      artist,
+      publisher,
+      releaseDate: data.date || '',
+      description: artist.length ? artist.join(', ') : '',
+      coverUrl: `https://coverartarchive.org/release/${releaseId}/front-500`,
+      type: 'album',
+      platform: 'musicbrainz'
+    };
+  } catch (error) {
+    console.error(`获取MusicBrainz专辑数据失败 ${releaseId}:`, error.message);
+    return null;
+  }
+}
+
+/**
  * 下载并转换图片为WebP格式
  */
-async function downloadAndConvertImage(url, fileName) {
+async function downloadAndConvertImage(url, fileName, options = {}) {
   if (!url) return null;
 
   try {
@@ -209,15 +273,15 @@ async function downloadAndConvertImage(url, fileName) {
     
     // 使用sharp将图片转换为WebP格式并优化
     const optimizedImageBuffer = await sharp(imageBuffer)
-      .resize(400, 600, { fit: 'inside', withoutEnlargement: true })
+      .resize(options.width || 500, options.height || 750, { fit: 'inside', withoutEnlargement: true })
       .webp({ quality: 80 })
       .toBuffer();
 
-    // 存储在生成的目录中
-    const imagePath = path.join(GENERATED_DIR, fileName);
+    // 存储在公开目录中，静态构建后可直接访问。
+    const imagePath = path.join(PUBLIC_GENERATED_DIR, fileName);
     await fs.writeFile(imagePath, optimizedImageBuffer);
     
-    return `/src/content/_generated/${fileName}`;
+    return `/generated/${fileName}`;
   } catch (error) {
     console.error(`下载或转换图片失败 ${url}:`, error.message);
     return null;
@@ -264,6 +328,22 @@ function parseUrl(url) {
       }
     }
 
+    // 豆瓣音乐
+    if (parsedUrl.hostname.includes('music.douban.com')) {
+      const match = parsedUrl.pathname.match(/\/subject\/(\d+)/);
+      if (match) {
+        return { platform: 'douban', id: match[1], type: 'album', url };
+      }
+    }
+
+    // MusicBrainz release
+    if (parsedUrl.hostname.includes('musicbrainz.org')) {
+      const match = parsedUrl.pathname.match(/\/release\/([a-f0-9-]+)/i);
+      if (match) {
+        return { platform: 'musicbrainz', id: match[1], type: 'album', url };
+      }
+    }
+
     return null;
   } catch (error) {
     console.error(`无效的URL: ${url}`, error.message);
@@ -283,7 +363,7 @@ async function processUrl(url, existingDataMap) {
 
   // 如果已经存在数据且没有过期，则跳过
   const cacheKey = `${parsed.platform}_${parsed.id}`;
-  if (existingDataMap[cacheKey]) {
+  if (existingDataMap[cacheKey] && !shouldRefreshItem(parsed, existingDataMap[cacheKey])) {
     return existingDataMap[cacheKey];
   }
 
@@ -295,6 +375,8 @@ async function processUrl(url, existingDataMap) {
     data = await getEpicData(parsed.id);
   } else if (parsed.platform === 'douban') {
     data = await getDoubanData(parsed.id, parsed.type);
+  } else if (parsed.platform === 'musicbrainz') {
+    data = await getMusicBrainzAlbumData(parsed.id);
   }
 
   if (!data) {
@@ -304,13 +386,40 @@ async function processUrl(url, existingDataMap) {
 
   // 下载并转换封面图片
   if (data.coverUrl) {
-    const ext = path.extname(data.coverUrl).split('.')[1] || 'webp';
-    const fileName = `${data.type}_${data.id}_${Date.now()}.${ext}`;
+    const fileName = `${data.type}_${data.id}_cover.webp`;
     const imagePath = await downloadAndConvertImage(data.coverUrl, fileName);
     data.localCoverPath = imagePath;
   }
 
+  if (data.posterUrl) {
+    const fileName = `${data.type}_${data.id}_poster.webp`;
+    const imagePath = await downloadAndConvertImage(data.posterUrl, fileName, { width: 600, height: 900 });
+    data.localPosterPath = imagePath;
+  }
+
   return data;
+}
+
+function shouldRefreshItem(parsed, item) {
+  if (!item) return true;
+
+  if (parsed.platform === 'steam' && (!item.posterUrl || !item.localPosterPath)) {
+    return true;
+  }
+
+  if (parsed.type === 'movie' && !item.director) {
+    return true;
+  }
+
+  if (parsed.type === 'book' && !item.author) {
+    return true;
+  }
+
+  if (parsed.type === 'album' && !item.artist) {
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -319,7 +428,7 @@ async function processUrl(url, existingDataMap) {
 async function main() {
   try {
     // 读取配置文件
-    const configFiles = ['games.json', 'movies.json', 'books.json'];
+    const configFiles = ['games.json', 'movies.json', 'books.json', 'albums.json'];
     
     for (const configFile of configFiles) {
       const configPath = path.join(CONFIG_DIR, configFile);
