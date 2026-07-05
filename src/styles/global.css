@@ -535,7 +535,7 @@ img {
 .hero-scroll-link {
   position: absolute;
   left: 50%;
-  bottom: 1rem;
+  bottom: 2rem;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -548,7 +548,7 @@ img {
   color: #fff7ef;
   backdrop-filter: blur(12px);
   transition: transform 0.2s ease, background-color 0.2s ease;
-  z-index: 100;
+  z-index: 20;
 }
 
 .hero-scroll-link:hover {
