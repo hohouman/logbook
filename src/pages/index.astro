@@ -150,7 +150,7 @@ function getSocialIcon(platform) {
         <div class="content-viewer__panels">
           <section class="content-panel" data-panel="games" data-active="true">
             <div class="content-panel__summary">
-              <p class="section-eyebrow" id="section-eyebrow">{panelCopy.games.eyebrow}</p>
+              <p class="section-eyebrow">{panelCopy.games.eyebrow}</p>
               <h3>{panelCopy.games.title}</h3>
               <p>{panelCopy.games.desc}</p>
             </div>
@@ -359,26 +359,6 @@ function getSocialIcon(platform) {
         tab.addEventListener('click', () => setActive(tab.dataset.view || 'games'));
       });
 
-      // 处理向下箭头按钮的点击事件
-      const scrollLink = document.querySelector('.hero-scroll-link');
-      if (scrollLink) {
-        scrollLink.addEventListener('click', (event) => {
-          event.preventDefault();
-          
-          // 获取section-eyebrow元素
-          const sectionEyebrow = document.getElementById('section-eyebrow');
-          if (!sectionEyebrow) return;
-          
-          // 使用offsetTop获取元素相对于文档顶部的精确位置
-          const targetPosition = sectionEyebrow.offsetTop;
-          
-          // 平滑滚动到目标位置
-          window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-          });
-        });
-      }
 
       setActive('games');
     }
