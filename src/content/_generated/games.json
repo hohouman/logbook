@@ -36,5 +36,108 @@
     "url": "https://store.steampowered.com/app/870780/____Control_Ultimate_Edition/",
     "localCoverPath": "/generated/game_870780_cover.webp",
     "localPosterPath": "/generated/game_870780_poster.webp"
+  },
+  {
+    "id": "493340",
+    "title": "雲霄飛車之星",
+    "developer": [
+      "Frontier Developments",
+      "Aspyr (Mac)"
+    ],
+    "publisher": [
+      "Frontier Developments",
+      "Aspyr (Mac)"
+    ],
+    "releaseDate": "2016 年 11 月 17 日",
+    "description": "Planet Coaster® – 雲霄飛車遊樂園模擬遊戲的明日之星來了！打造你的雲霄飛車遊樂園帝國，為數量驚人的遊客們帶來驚喜、歡樂和刺激。盡情發揮你的創意，並將成就分享給全世界。",
+    "coverUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/493340/header.jpg?t=1782480201",
+    "posterUrl": "https://cdn.akamai.steamstatic.com/steam/apps/493340/library_600x900.jpg",
+    "type": "game",
+    "platform": "steam",
+    "url": "https://store.steampowered.com/app/493340",
+    "localCoverPath": "/generated/game_493340_cover.webp",
+    "localPosterPath": "/generated/game_493340_poster.webp"
+  },
+  {
+    "id": "848450",
+    "title": "深海迷航：冰点之下",
+    "developer": [
+      "Unknown Worlds Entertainment"
+    ],
+    "publisher": [
+      "Unknown Worlds Entertainment"
+    ],
+    "releaseDate": "2021 年 5 月 13 日",
+    "description": "在外星上，潜入冰冻的水下冒险。《Below Zero》的故事发生在《Subnautica》原作之后的两年。重返4546B行星，揭开致命的掩饰行动背后的真相。建造加压舱，打造工具，在恶劣条件中生存，深潜进入《Subnautica》的世界。",
+    "coverUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/848450/header.jpg?t=1777456254",
+    "posterUrl": "https://cdn.akamai.steamstatic.com/steam/apps/848450/library_600x900.jpg",
+    "type": "game",
+    "platform": "steam",
+    "url": "https://store.steampowered.com/app/848450",
+    "localCoverPath": "/generated/game_848450_cover.webp",
+    "localPosterPath": "/generated/game_848450_poster.webp"
+  },
+  {
+    "id": "548430",
+    "title": "深岩银河",
+    "developer": [
+      "Ghost Ship Games"
+    ],
+    "publisher": [
+      "Coffee Stain Publishing"
+    ],
+    "releaseDate": "2020 年 5 月 13 日",
+    "description": "《深岩银河》是一款多人合作类第一人称射击游戏，有着了不起的矮人、100% 可破坏的地形、由程序生成的洞穴以及无数的外星怪物。",
+    "coverUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/548430/header_schinese.jpg?t=1782116973",
+    "posterUrl": "https://cdn.akamai.steamstatic.com/steam/apps/548430/library_600x900.jpg",
+    "type": "game",
+    "platform": "steam",
+    "url": "https://store.steampowered.com/app/548430",
+    "localCoverPath": "/generated/game_548430_cover.webp",
+    "localPosterPath": "/generated/game_548430_poster.webp"
+  },
+  {
+    "id": "305620",
+    "title": "The Long Dark",
+    "developer": [
+      "Hinterland Studio Inc."
+    ],
+    "publisher": [
+      "Hinterland Studio Inc."
+    ],
+    "releaseDate": "2017 年 8 月 1 日",
+    "description": "《漫漫长夜》是一款引人深思的探索生存类游戏。在游戏中，玩家需要在地磁灾难之后探索巨大的荒野冰原，他们必须独立思考，找到出路。游戏中没有僵尸，只有你、严寒和大自然中的所有残酷环境。欢迎来到寂静天启。",
+    "coverUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/305620/3d41bec8760d9c7fc2b724317229630d644c8f46/header.jpg?t=1780689206",
+    "posterUrl": "https://cdn.akamai.steamstatic.com/steam/apps/305620/library_600x900.jpg",
+    "type": "game",
+    "platform": "steam",
+    "url": "https://store.steampowered.com/app/305620",
+    "localCoverPath": "/generated/game_305620_cover.webp",
+    "localPosterPath": "/generated/game_305620_poster.webp"
+  },
+  {
+    "id": "391220",
+    "title": "Rise of the Tomb Raider™",
+    "developer": [
+      "Crystal Dynamics",
+      "Eidos-Montréal",
+      "Feral Interactive (Mac)",
+      "Feral Interactive (Linux)",
+      "Nixxes"
+    ],
+    "publisher": [
+      "Crystal Dynamics",
+      "Feral Interactive (Mac)",
+      "Feral Interactive (Linux)"
+    ],
+    "releaseDate": "2016 年 2 月 9 日",
+    "description": "《古墓丽影：崛起》20 周年纪念版包括基础游戏和以全新内容为特色的季票。您可以在全新的“血缘”故事中探索克劳馥庄园，并在“劳拉的梦魇”中保护其免受僵尸入侵。",
+    "coverUrl": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/391220/header.jpg?t=1766187095",
+    "posterUrl": "https://cdn.akamai.steamstatic.com/steam/apps/391220/library_600x900.jpg",
+    "type": "game",
+    "platform": "steam",
+    "url": "https://store.steampowered.com/app/391220",
+    "localCoverPath": "/generated/game_391220_cover.webp",
+    "localPosterPath": "/generated/game_391220_poster.webp"
   }
 ]
