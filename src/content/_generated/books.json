@@ -4,10 +4,14 @@
     "title": "寒武再临",
     "developer": [],
     "director": [],
-    "author": [],
+    "author": [
+      "水千丞"
+    ],
     "artist": [],
-    "publisher": [],
-    "releaseDate": "",
+    "publisher": [
+      "百花洲文艺出版社"
+    ],
+    "releaseDate": "2014-12",
     "description": "",
     "coverUrl": "https://img3.doubanio.com/view/subject/s/public/s29478473.jpg",
     "type": "book",

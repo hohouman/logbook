@@ -2,12 +2,16 @@
   {
     "id": "26754880",
     "title": "萌学园：寻找盘古",
-    "developer": [],
-    "director": [],
+    "developer": [
+      "李权峰"
+    ],
+    "director": [
+      "李权峰"
+    ],
     "author": [],
     "artist": [],
     "publisher": [],
-    "releaseDate": "",
+    "releaseDate": "2018-07-28(中国大陆)",
     "description": "",
     "coverUrl": "https://img9.doubanio.com/view/photo/s_ratio_poster/public/p2528103085.webp",
     "type": "movie",
