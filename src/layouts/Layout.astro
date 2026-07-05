@@ -1,3 +1,25 @@
+---
+// 导入必要的Astro功能
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+// 加载配置数据
+import profile from '../config/profile.json';
+// 注意：由于useColorThief是一个服务端函数，不能在这里直接await
+// 我们将在客户端脚本中处理颜色提取
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  children: import('astro').JSX.Element;
+}
+
+const { title, description, image, children } = Astro.props;
+const wallpaper = profile.wallpaper || '/src/assets/wallpaper.jpg';
+// 暂时设置默认颜色，将在客户端动态计算
+const defaultColor = '#6c5ce7';
+
 /**
  * 使用Canvas从图片中提取主色调
  * @param imageUrl - 图片URL
@@ -55,25 +77,7 @@ export async function useColorThief(imageUrl: string): Promise<string | null> {
     return null;
   }
 }
----
-// 导入必要的Astro功能
-import Footer from '../components/Footer.astro';
-import '../styles/global.css';
 
-// 加载配置数据
-import profile from '../content/config/profile.json';
-import { useColorThief } from '../utils/color-thief';
-
-interface Props {
-  title?: string;
-  description?: string;
-  image?: string;
-  children: import('astro').JSX.Element;
-}
-
-const { title, description, image, children } = Astro.props;
-const wallpaper = profile.wallpaper || '/src/assets/wallpaper.jpg';
-const dominantColor = await useColorThief(wallpaper);
 ---
 
 <!DOCTYPE html>
@@ -92,8 +96,8 @@ const dominantColor = await useColorThief(wallpaper);
   
   <style is:global>
     :root {
-      --dominant-color: #{dominantColor || '6c5ce7'};
-      --dominant-color-rgb: #{dominantColor?.substring(1).match(/.{2}/g)?.map(c => parseInt(c, 16)).join(', ') || '108, 92, 231'};
+      --dominant-color: #6c5ce7;
+      --dominant-color-rgb: 108, 92, 231;
       --background-start: rgba(0, 0, 0, 0.7);
       --background-end: rgba(0, 0, 0, 0.9);
       --text-primary: #ffffff;
@@ -299,10 +303,76 @@ const dominantColor = await useColorThief(wallpaper);
   <Footer />
   
   <script>
+    // 创建一个函数来获取主色调
+    async function getColorThief(imageUrl) {
+      try {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.src = imageUrl;
+        
+        return new Promise((resolve) => {
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+              resolve('#6c5ce7'); // 默认颜色
+              return;
+            }
+            
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            
+            // 计算平均颜色
+            let r = 0, g = 0, b = 0, count = 0;
+            for (let i = 0; i < data.length; i += 4 * 100) {
+              r += data[i];
+              g += data[i + 1];
+              b += data[i + 2];
+              count++;
+            }
+            
+            if (count > 0) {
+              r = Math.floor(r / count);
+              g = Math.floor(g / count);
+              b = Math.floor(b / count);
+              // 转换为十六进制
+              const hex = ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+              resolve(`#${hex}`);
+            } else {
+              resolve('#6c5ce7'); // 默认颜色
+            }
+          };
+          
+          img.onerror = () => {
+            resolve('#6c5ce7'); // 默认颜色
+          };
+        });
+      } catch (error) {
+        console.error('Color extraction failed:', error);
+        return '#6c5ce7'; // 默认颜色
+      }
+    }
+
     // 监听滚动事件，改变头部透明度和背景效果
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', async () => {
       const header = document.getElementById('header');
       const heroBg = document.getElementById('hero-bg');
+      
+      // 提取主色调并更新CSS变量
+      const dominantColor = await getColorThief('{wallpaper}');
+      if (dominantColor && dominantColor !== '#6c5ce7') {
+        document.documentElement.style.setProperty('--dominant-color', dominantColor);
+        
+        // 将十六进制转换为RGB
+        const r = parseInt(dominantColor.slice(1, 3), 16);
+        const g = parseInt(dominantColor.slice(3, 5), 16);
+        const b = parseInt(dominantColor.slice(5, 7), 16);
+        document.documentElement.style.setProperty('--dominant-color-rgb', `${r}, ${g}, ${b}`);
+      }
       
       window.addEventListener('scroll', () => {
         const scrollPosition = window.scrollY;
