@@ -305,11 +305,6 @@ function getSocialIcon(platform) {
             </div>
           </section>
         </div>
-
-        <div class="content-panel__controls">
-          <button type="button" class="content-nav-button" data-step="prev" aria-label="上一项">←</button>
-          <button type="button" class="content-nav-button" data-step="next" aria-label="下一项">→</button>
-        </div>
       </div>
     </div>
   </section>
@@ -348,21 +343,8 @@ function getSocialIcon(platform) {
 
       const getCurrentKey = () => viewer.dataset.activeView || 'games';
 
-      const move = (direction) => {
-        const currentKey = getCurrentKey();
-        const currentIndex = keys.indexOf(currentKey);
-        const nextIndex = direction === 'next'
-          ? (currentIndex + 1) % keys.length
-          : (currentIndex - 1 + keys.length) % keys.length;
-        setActive(keys[nextIndex] || 'games');
-      };
-
       tabs.forEach((tab) => {
         tab.addEventListener('click', () => setActive(tab.dataset.view || 'games'));
-      });
-
-      viewer.querySelectorAll('[data-step]').forEach((button) => {
-        button.addEventListener('click', () => move(button.dataset.step));
       });
 
       setActive('games');

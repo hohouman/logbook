@@ -266,14 +266,48 @@ async function getDoubanData(doubanId, type, url) {
         }
       }
 
-      // 改进描述提取
-      let desc = extractText('[property="v:summary"]');
+      // 改进描述提取 - 尝试多种选择器
+      let desc = '';
+      
+      // 方法1: 使用v:summary属性
+      const summaryEl = document.querySelector('[property="v:summary"]');
+      if (summaryEl) {
+        desc = summaryEl.textContent.trim();
+      }
+      
+      // 方法2: 查找简介相关的div
       if (!desc) {
-        const summaryAll = document.querySelector('.related-info .all.hidden, .summary .all.hidden');
-        if (summaryAll) {
-          desc = summaryAll.textContent.trim();
-        } else {
-          desc = extractText('.related-info') || extractText('.summary');
+        const relatedInfo = document.querySelector('.related-info');
+        if (relatedInfo) {
+          // 尝试获取完整内容
+          const allContent = relatedInfo.querySelector('.all');
+          if (allContent) {
+            desc = allContent.textContent.trim();
+          } else {
+            desc = relatedInfo.textContent.trim();
+          }
+        }
+      }
+      
+      // 方法3: 查找summary类
+      if (!desc) {
+        const summaryDiv = document.querySelector('.summary');
+        if (summaryDiv) {
+          desc = summaryDiv.textContent.trim();
+        }
+      }
+      
+      // 方法4: 查找剧情简介、内容简介等常见标题
+      if (!desc) {
+        const infoSections = document.querySelectorAll('#info, .indent');
+        for (const section of infoSections) {
+          const text = section.textContent;
+          // 匹配"剧情简介"、"内容简介"、"简介"等关键词后的内容
+          const match = text.match(/(?:剧情简介|内容简介|简介)[:：]\s*([\s\S]{50,500}?)(?=\n\n|\n\s*\n|$)/);
+          if (match) {
+            desc = match[1].trim();
+            break;
+          }
         }
       }
       
@@ -281,6 +315,10 @@ async function getDoubanData(doubanId, type, url) {
       if (desc.length > 500) {
         desc = desc.substring(0, 500) + '...';
       }
+
+      // 调试输出
+      console.log(`[${type}] Description length: ${desc.length}`);
+      console.log(`[${type}] Description preview: ${desc.substring(0, 100)}...`);
 
       return {
         title: title,
