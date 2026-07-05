@@ -20,18 +20,18 @@ await fs.mkdir(PUBLIC_GENERATED_DIR, { recursive: true });
 /**
  * 从Steam API获取游戏数据
  */
-async function getSteamData(appId) {
+async function getSteamData(appId, url) {
   try {
     // 优先尝试简体中文 (schinese)，然后繁体中文 (tchinese)，最后默认语言
     const languages = ['schinese', 'tchinese', ''];
     
     for (const lang of languages) {
       try {
-        const url = lang 
+        const apiUrl = lang 
           ? `https://store.steampowered.com/api/appdetails?appids=${appId}&l=${lang}`
           : `https://store.steampowered.com/api/appdetails?appids=${appId}`;
         
-        const response = await fetch(url);
+        const response = await fetch(apiUrl);
         const data = await response.json();
         const appData = data[appId]?.data;
         
@@ -47,7 +47,8 @@ async function getSteamData(appId) {
             coverUrl: appData.header_image,
             posterUrl: `https://cdn.akamai.steamstatic.com/steam/apps/${appId}/library_600x900.jpg`,
             type: 'game',
-            platform: 'steam'
+            platform: 'steam',
+            url: url || `https://store.steampowered.com/app/${appId}/`
           };
         }
       } catch (error) {
@@ -67,7 +68,7 @@ async function getSteamData(appId) {
 /**
  * 从豆瓣获取电影/书籍数据
  */
-async function getDoubanData(doubanId, type) {
+async function getDoubanData(doubanId, type, url) {
   const browser = await puppeteer.launch({
     headless: true,
     args: [
@@ -94,11 +95,11 @@ async function getDoubanData(doubanId, type) {
     });
     
     const host = type === 'movie' ? 'movie' : type === 'book' ? 'book' : 'music';
-    const url = `https://${host}.douban.com/subject/${doubanId}/`;
+    const pageUrl = `https://${host}.douban.com/subject/${doubanId}/`;
     
-    console.log(`正在访问豆瓣页面：${url}`);
+    console.log(`正在访问豆瓣页面：${pageUrl}`);
     
-    await page.goto(url, {
+    await page.goto(pageUrl, {
       waitUntil: 'networkidle2',
       timeout: 30000
     });
@@ -252,7 +253,8 @@ async function getDoubanData(doubanId, type) {
       description: data.description,
       coverUrl: data.coverUrl,
       type: type,
-      platform: 'douban'
+      platform: 'douban',
+      url: url || pageUrl
     };
   } catch (error) {
     await browser.close().catch(() => {});
@@ -264,7 +266,7 @@ async function getDoubanData(doubanId, type) {
 /**
  * 从MusicBrainz和Cover Art Archive获取专辑数据
  */
-async function getMusicBrainzAlbumData(releaseId) {
+async function getMusicBrainzAlbumData(releaseId, url) {
   try {
     const response = await fetch(`https://musicbrainz.org/ws/2/release/${releaseId}?inc=artist-credits+labels&fmt=json`, {
       headers: {
@@ -293,7 +295,8 @@ async function getMusicBrainzAlbumData(releaseId) {
       description: artist.length ? artist.join(', ') : '',
       coverUrl: `https://coverartarchive.org/release/${releaseId}/front-500`,
       type: 'album',
-      platform: 'musicbrainz'
+      platform: 'musicbrainz',
+      url: url || `https://musicbrainz.org/release/${releaseId}`
     };
   } catch (error) {
     console.error(`获取MusicBrainz专辑数据失败 ${releaseId}:`, error.message);
@@ -413,11 +416,11 @@ async function processUrl(url, existingDataMap) {
   let data = null;
 
   if (parsed.platform === 'steam') {
-    data = await getSteamData(parsed.id);
+    data = await getSteamData(parsed.id, parsed.url);
   } else if (parsed.platform === 'douban') {
-    data = await getDoubanData(parsed.id, parsed.type);
+    data = await getDoubanData(parsed.id, parsed.type, parsed.url);
   } else if (parsed.platform === 'musicbrainz') {
-    data = await getMusicBrainzAlbumData(parsed.id);
+    data = await getMusicBrainzAlbumData(parsed.id, parsed.url);
   }
 
   if (!data) {

@@ -30,20 +30,22 @@ const movies = Array.isArray(moviesData) ? moviesData : (moviesData.items || [])
     {movies.length > 0 ? (
       <div class="collection-grid">
         {movies.map((movie) => (
-          <article class="entry-card entry-card--compact" key={movie.id}>
-            <div class="entry-card__media">
-              {movie.localCoverPath ? <img src={movie.localCoverPath} alt={movie.title} loading="lazy" /> : null}
-            </div>
-            <div class="entry-card__body">
-              <span class="card-tag">Movie</span>
-              <h3 class="entry-card__title">{movie.title}</h3>
-              {movie.description ? <p class="entry-card__desc">{movie.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-              <div class="entry-card__meta">
-                <div><strong>Director:</strong> {Array.isArray(movie.director) ? movie.director.join(', ') : movie.director || 'Unknown'}</div>
-                <div><strong>Release:</strong> {movie.releaseDate || 'TBA'}</div>
+          <a href={movie.url} target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+            <article class="entry-card entry-card--compact" key={movie.id}>
+              <div class="entry-card__media">
+                {movie.localCoverPath ? <img src={movie.localCoverPath} alt={movie.title} loading="lazy" /> : null}
               </div>
-            </div>
-          </article>
+              <div class="entry-card__body">
+                <span class="card-tag">Movie</span>
+                <h3 class="entry-card__title">{movie.title}</h3>
+                {movie.description ? <p class="entry-card__desc">{movie.description}</p> : <p class="entry-card__desc">No description provided.</p>}
+                <div class="entry-card__meta">
+                  <div><strong>Director:</strong> {Array.isArray(movie.director) ? movie.director.join(', ') : movie.director || 'Unknown'}</div>
+                  <div><strong>Release:</strong> {movie.releaseDate || 'TBA'}</div>
+                </div>
+              </div>
+            </article>
+          </a>
         ))}
       </div>
     ) : (

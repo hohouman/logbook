@@ -30,21 +30,23 @@ const books = Array.isArray(booksData) ? booksData : (booksData.items || []);
     {books.length > 0 ? (
       <div class="collection-grid">
         {books.map((book) => (
-          <article class="entry-card entry-card--compact" key={book.id}>
-            <div class="entry-card__media">
-              {book.localCoverPath ? <img src={book.localCoverPath} alt={book.title} loading="lazy" /> : null}
-            </div>
-            <div class="entry-card__body">
-              <span class="card-tag">Book</span>
-              <h3 class="entry-card__title">{book.title}</h3>
-              {book.description ? <p class="entry-card__desc">{book.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-              <div class="entry-card__meta">
-                <div><strong>Author:</strong> {Array.isArray(book.author) ? book.author.join(', ') : book.author || (Array.isArray(book.developer) ? book.developer.join(', ') : book.developer) || 'Unknown'}</div>
-                <div><strong>Publisher:</strong> {Array.isArray(book.publisher) ? book.publisher.join(', ') : book.publisher || 'Unknown'}</div>
-                <div><strong>Release:</strong> {book.releaseDate || 'TBA'}</div>
+          <a href={book.url} target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+            <article class="entry-card entry-card--compact" key={book.id}>
+              <div class="entry-card__media">
+                {book.localCoverPath ? <img src={book.localCoverPath} alt={book.title} loading="lazy" /> : null}
               </div>
-            </div>
-          </article>
+              <div class="entry-card__body">
+                <span class="card-tag">Book</span>
+                <h3 class="entry-card__title">{book.title}</h3>
+                {book.description ? <p class="entry-card__desc">{book.description}</p> : <p class="entry-card__desc">No description provided.</p>}
+                <div class="entry-card__meta">
+                  <div><strong>Author:</strong> {Array.isArray(book.author) ? book.author.join(', ') : book.author || (Array.isArray(book.developer) ? book.developer.join(', ') : book.developer) || 'Unknown'}</div>
+                  <div><strong>Publisher:</strong> {Array.isArray(book.publisher) ? book.publisher.join(', ') : book.publisher || 'Unknown'}</div>
+                  <div><strong>Release:</strong> {book.releaseDate || 'TBA'}</div>
+                </div>
+              </div>
+            </article>
+          </a>
         ))}
       </div>
     ) : (

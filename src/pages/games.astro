@@ -30,21 +30,23 @@ const games = Array.isArray(gamesData) ? gamesData : (gamesData.items || []);
     {games.length > 0 ? (
       <div class="collection-grid">
         {games.map((game) => (
-          <article class={`entry-card entry-card--compact${game.localPosterPath ? '' : ' entry-card--wide-media'}`} key={game.id}>
-            <div class="entry-card__media">
-              {game.localPosterPath || game.localCoverPath ? <img src={game.localPosterPath || game.localCoverPath} alt={game.title} loading="lazy" /> : null}
-            </div>
-            <div class="entry-card__body">
-              <span class="card-tag">Game</span>
-              <h3 class="entry-card__title">{game.title}</h3>
-              {game.description ? <p class="entry-card__desc">{game.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-              <div class="entry-card__meta">
-                <div><strong>Developer:</strong> {Array.isArray(game.developer) ? game.developer.join(', ') : game.developer || 'Unknown'}</div>
-                <div><strong>Publisher:</strong> {Array.isArray(game.publisher) ? game.publisher.join(', ') : game.publisher || 'Unknown'}</div>
-                <div><strong>Release:</strong> {game.releaseDate || 'TBA'}</div>
+          <a href={game.url} target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+            <article class={`entry-card entry-card--compact${game.localPosterPath ? '' : ' entry-card--wide-media'}`} key={game.id}>
+              <div class="entry-card__media">
+                {game.localPosterPath || game.localCoverPath ? <img src={game.localPosterPath || game.localCoverPath} alt={game.title} loading="lazy" /> : null}
               </div>
-            </div>
-          </article>
+              <div class="entry-card__body">
+                <span class="card-tag">Game</span>
+                <h3 class="entry-card__title">{game.title}</h3>
+                {game.description ? <p class="entry-card__desc">{game.description}</p> : <p class="entry-card__desc">No description provided.</p>}
+                <div class="entry-card__meta">
+                  <div><strong>Developer:</strong> {Array.isArray(game.developer) ? game.developer.join(', ') : game.developer || 'Unknown'}</div>
+                  <div><strong>Publisher:</strong> {Array.isArray(game.publisher) ? game.publisher.join(', ') : game.publisher || 'Unknown'}</div>
+                  <div><strong>Release:</strong> {game.releaseDate || 'TBA'}</div>
+                </div>
+              </div>
+            </article>
+          </a>
         ))}
       </div>
     ) : (

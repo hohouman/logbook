@@ -47,19 +47,37 @@ const albumNotes = albums.length > 0 ? albums : [
 
     <div class="collection-grid">
       {albumNotes.map((item) => (
-        <article class={`entry-card${item.localCoverPath ? ' entry-card--compact' : ''}`}>
-          {item.localCoverPath ? (
-            <div class="entry-card__media">
-              <img src={item.localCoverPath} alt={item.title} loading="lazy" />
+        item.url ? (
+          <a href={item.url} target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+            <article class={`entry-card${item.localCoverPath ? ' entry-card--compact' : ''}`}>
+              {item.localCoverPath ? (
+                <div class="entry-card__media">
+                  <img src={item.localCoverPath} alt={item.title} loading="lazy" />
+                </div>
+              ) : null}
+              <div class="entry-card__body">
+                <span class="card-tag">Album</span>
+                <h3 class="entry-card__title">{item.title}</h3>
+                {item.artist ? <p class="entry-card__meta-line">{Array.isArray(item.artist) ? item.artist.join(', ') : item.artist}</p> : null}
+                <p class="entry-card__desc">{item.description || item.desc}</p>
+              </div>
+            </article>
+          </a>
+        ) : (
+          <article class={`entry-card${item.localCoverPath ? ' entry-card--compact' : ''}`}>
+            {item.localCoverPath ? (
+              <div class="entry-card__media">
+                <img src={item.localCoverPath} alt={item.title} loading="lazy" />
+              </div>
+            ) : null}
+            <div class="entry-card__body">
+              <span class="card-tag">Album</span>
+              <h3 class="entry-card__title">{item.title}</h3>
+              {item.artist ? <p class="entry-card__meta-line">{Array.isArray(item.artist) ? item.artist.join(', ') : item.artist}</p> : null}
+              <p class="entry-card__desc">{item.description || item.desc}</p>
             </div>
-          ) : null}
-          <div class="entry-card__body">
-            <span class="card-tag">Album</span>
-            <h3 class="entry-card__title">{item.title}</h3>
-            {item.artist ? <p class="entry-card__meta-line">{Array.isArray(item.artist) ? item.artist.join(', ') : item.artist}</p> : null}
-            <p class="entry-card__desc">{item.description || item.desc}</p>
-          </div>
-        </article>
+          </article>
+        )
       ))}
     </div>
   </section>
