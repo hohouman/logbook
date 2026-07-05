@@ -314,13 +314,15 @@ async function downloadAndConvertImage(url, fileName, options = {}) {
     // 为豆瓣图片添加特殊的请求头以避免防盗链问题
     const headers = {};
     if (url.includes('doubanio.com') || url.includes('douban.com')) {
-      headers['Referer'] = '';
-      headers['Referrer-Policy'] = 'no-referrer';
+      // 设置Referer为豆瓣网站，绕过防盗链
+      headers['Referer'] = 'https://www.douban.com/';
+      headers['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
     }
     
     const response = await fetch(url, { headers });
     
     if (!response.ok) {
+      console.warn(`图片下载失败 (${response.status}): ${url}`);
       throw new Error(`Failed to download image: ${response.statusText}`);
     }
 
@@ -336,9 +338,10 @@ async function downloadAndConvertImage(url, fileName, options = {}) {
     const imagePath = path.join(PUBLIC_GENERATED_DIR, fileName);
     await fs.writeFile(imagePath, optimizedImageBuffer);
     
+    console.log(`✓ 图片下载成功: ${fileName}`);
     return `/generated/${fileName}`;
   } catch (error) {
-    console.error(`下载或转换图片失败 ${url}:`, error.message);
+    console.error(` 下载或转换图片失败 ${url}:`, error.message);
     return null;
   }
 }
