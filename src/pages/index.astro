@@ -356,20 +356,39 @@ function getSocialIcon(platform) {
         // 获取目标panel和它的第一个子元素（说明栏）
         const targetPanel = tabsMap[key];
         const firstChild = targetPanel.firstElementChild;
-        
-        // 始终滚动到使content-tabs位于视口顶部的位置（与箭头按钮行为一致）
         const contentTabs = document.getElementById('content-tabs');
-        if (contentTabs) {
+        
+        if (contentTabs && firstChild) {
           const tabsRect = contentTabs.getBoundingClientRect();
+          const firstChildRect = firstChild.getBoundingClientRect();
           const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          const targetScrollTop = tabsRect.top + scrollTop;
           
-          // 只有当需要调整位置时才滚动（避免微小差异导致的抖动）
-          if (Math.abs(tabsRect.top) > 10) {
-            window.scrollTo({
-              top: Math.max(0, targetScrollTop),
-              behavior: 'smooth'
-            });
+          // 判断菜单栏是否处于sticky状态（在视口顶部附近）
+          const isTabsSticky = tabsRect.top >= -10 && tabsRect.top <= 20;
+          
+          if (isTabsSticky) {
+            // 菜单栏已在顶部，需要向上微调使内容显示在菜单栏下方
+            const tabsHeight = tabsRect.height;
+            // 计算需要的滚动位置：使firstChild恰好显示在tabs下方
+            const targetScrollTop = scrollTop + firstChildRect.top - tabsHeight - 20;
+            
+            // 只有当需要调整时才滚动
+            if (Math.abs(firstChildRect.top - tabsHeight) > 10) {
+              window.scrollTo({
+                top: Math.max(0, targetScrollTop),
+                behavior: 'smooth'
+              });
+            }
+          } else {
+            // 菜单栏不在顶部，向下滚动使tabs到达视口顶部（与箭头按钮行为一致）
+            const targetScrollTop = tabsRect.top + scrollTop;
+            
+            if (Math.abs(tabsRect.top) > 10) {
+              window.scrollTo({
+                top: Math.max(0, targetScrollTop),
+                behavior: 'smooth'
+              });
+            }
           }
         }
         
