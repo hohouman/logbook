@@ -802,14 +802,14 @@ img {
    ============================================ */
 .showcase-card--tall {
   display: grid !important;
-  grid-template-columns: minmax(100px, 30%) minmax(0, 1fr) !important;
+  grid-template-columns: minmax(110px, 32%) minmax(0, 1fr) !important;
   width: 100%;
-  max-width: 580px;
-  /* 优化高度：图片区(30%宽度)按2:3比例 + 紧凑的内容区 */
-  /* 假设图片区宽度约150px (580 * 0.3 * 0.85考虑padding)，高度 = 150 * 1.5 = 225px */
-  /* 内容区紧凑布局约150px，总高度约375px -> 但实际可以更紧凑 */
-  /* 最终设定为340px，让图片更贴合 */
-  height: 340px;
+  max-width: 640px; /* 增加最大宽度，给左右布局更多空间 */
+  /* 精确计算：图片区按2:3比例 + 紧凑内容区 */
+  /* 图片区宽度约200px (640 * 0.32)，高度 = 200 * 1.5 = 300px */
+  /* 内容区紧凑约80px，总高度380px -> 但实际图片不会那么大 */
+  /* 更合理的：图片区最小110px，高度165px，内容区135px，总300px */
+  height: 320px; /* 最终平衡值 */
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 16px;
@@ -831,9 +831,8 @@ img {
 .showcase-card--tall .entry-card__media {
   width: 100%;
   height: 100%;
-  padding: 0.75rem;
-  /* 保持背景以显示毛玻璃效果 */
-  background: inherit; /* 继承父容器背景 */
+  padding: 0.5rem; /* 进一步减小padding，让图片更贴合 */
+  background: inherit;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -859,43 +858,44 @@ img {
 }
 
 .showcase-card--tall .entry-card__title {
-  font-size: clamp(1rem, 1.8vw, 1.2rem);
-  font-weight: 600;
+  font-size: clamp(1.05rem, 2vw, 1.25rem); /* 稍微增大标题 */
+  font-weight: 700; /* 增加粗细 */
   color: #fff7ef;
   margin: 0;
-  line-height: 1.35;
+  line-height: 1.3;
 }
 
 .showcase-card--tall .entry-card__desc {
   display: -webkit-box;
-  -webkit-line-clamp: 3; /* 从4行减少到3行 */
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  font-size: 0.85rem; /* 稍微减小字体 */
+  font-size: 0.875rem;
   line-height: 1.5;
-  color: rgba(255, 247, 239, 0.85);
+  color: rgba(255, 247, 239, 0.88); /* 提高可读性 */
   margin: 0;
 }
 
 .showcase-card--tall .entry-card__meta {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
-  font-size: 0.78rem;
-  color: rgba(255, 247, 239, 0.75);
+  gap: 0.15rem; /* 减小元信息间距 */
+  font-size: 0.75rem;
+  color: rgba(255, 247, 239, 0.7);
   margin-top: auto;
-  padding-top: 0.5rem;
+  padding-top: 0.375rem;
 }
 
 .showcase-card--tall .card-tag {
   width: fit-content;
-  padding: 0.25rem 0.7rem;
-  background: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 247, 239, 0.9);
-  font-size: 0.72rem;
-  font-weight: 500;
+  padding: 0.2rem 0.65rem;
+  background: rgba(255, 255, 255, 0.18); /* 稍微增强背景 */
+  color: rgba(255, 247, 239, 0.95);
+  font-size: 0.7rem;
+  font-weight: 600;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  margin-bottom: 0.25rem; /* 与标题的间距 */
 }
 
 /* ============================================
@@ -1138,38 +1138,38 @@ img {
 
   /* 移动端卡片优化 - Tall（左右布局，固定高度） */
   .showcase-card--tall {
-    grid-template-columns: minmax(90px, 28%) minmax(0, 1fr) !important;
+    grid-template-columns: minmax(85px, 30%) minmax(0, 1fr) !important;
     max-width: 100%;
     border-radius: 12px;
-    height: 300px; /* 移动端也降低高度 */
+    height: 290px; /* 移动端相应调整 */
   }
 
   .showcase-card--tall .entry-card__media {
-    padding: 0.75rem;
+    padding: 0.4rem;
   }
 
   .showcase-card--tall .entry-card__body {
-    padding: 0.75rem 1rem;
-    gap: 0.4rem;
+    padding: 0.75rem 0.875rem;
+    gap: 0.35rem;
   }
 
   .showcase-card--tall .entry-card__title {
-    font-size: 0.95rem;
+    font-size: 0.975rem;
   }
 
   .showcase-card--tall .entry-card__desc {
-    -webkit-line-clamp: 3;
-    font-size: 0.82rem;
+    -webkit-line-clamp: 2; /* 移动端只显示2行 */
+    font-size: 0.8rem;
   }
 
   .showcase-card--tall .entry-card__meta {
-    font-size: 0.72rem;
-    gap: 0.15rem;
+    font-size: 0.7rem;
+    gap: 0.125rem;
   }
 
   .showcase-card--tall .card-tag {
-    padding: 0.2rem 0.6rem;
-    font-size: 0.68rem;
+    padding: 0.175rem 0.55rem;
+    font-size: 0.65rem;
   }
 
   /* 移动端卡片优化 - Square（上下布局，方形图片） */
