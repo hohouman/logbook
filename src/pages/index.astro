@@ -158,7 +158,7 @@ function getSocialIcon(platform) {
               <div class="content-panel__list">
                 {games.map((game) => (
                   <a href={game.url} target="_blank" style="text-decoration: none; color: inherit;">
-                    <article class={`showcase-card${game.localPosterPath ? '' : ' showcase-card--wide-media'}`}>
+                    <article class="showcase-card">
                       <div class="entry-card__media">
                         {game.localPosterPath || game.localCoverPath ? <img src={game.localPosterPath || game.localCoverPath} alt={game.title} loading="lazy" /> : null}
                       </div>
@@ -257,7 +257,7 @@ function getSocialIcon(platform) {
                 {albumCards.map((item) => (
                   item.url ? (
                     <a href={item.url} target="_blank" style="text-decoration: none; color: inherit;">
-                      <article class={`showcase-card${item.localCoverPath ? '' : ' showcase-card--wide-media'}`}>
+                      <article class="showcase-card">
                         <div class="entry-card__media">
                           {item.localCoverPath ? <img src={item.localCoverPath} alt={item.title} loading="lazy" /> : null}
                         </div>
@@ -274,7 +274,7 @@ function getSocialIcon(platform) {
                       </article>
                     </a>
                   ) : (
-                    <article class={`showcase-card${item.localCoverPath ? '' : ' showcase-card--wide-media'}`}>
+                    <article class="showcase-card">
                       <div class="entry-card__media">
                         {item.localCoverPath ? <img src={item.localCoverPath} alt={item.title} loading="lazy" /> : null}
                       </div>
