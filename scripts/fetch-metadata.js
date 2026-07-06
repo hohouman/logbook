@@ -551,35 +551,50 @@ async function getDoubanData(doubanId, type, url) {
         artist: artist,
         publisher: publisher,
         description: desc,
-        _debug_info_html: debugInfoHtml,
       };
     }, type);
 
     // 备用方法：如果publisher为空，尝试从HTML中用正则表达式提取
+    console.log(`[DEBUG] 检查出版社提取: type=${type}, publisher=${JSON.stringify(data.publisher)}, length=${data.publisher ? data.publisher.length : 'N/A'}`);
+    
     if (type === 'book' && (!data.publisher || data.publisher.length === 0)) {
+      console.log('[DEBUG] 条件满足，开始备用提取...');
       try {
         const html = await page.content();
+        console.log(`[DEBUG] HTML长度: ${html.length}`);
         
         // 匹配模式：<span class="pl">出版社:</span> XXX<br/> 或 <span class="pl">出版社:</span> XXX
         const publisherMatch = html.match(/<span\s+class="pl">出版社:<\/span>\s*([^<\n]+)/);
+        console.log(`[DEBUG] 正则匹配结果: ${publisherMatch ? `"${publisherMatch[1]}"` : 'null'}`);
         
         if (publisherMatch && publisherMatch[1]) {
           const extractedPublisher = publisherMatch[1].trim();
+          console.log(`[DEBUG] 提取的出版社: "${extractedPublisher}"`);
           
           if (extractedPublisher && extractedPublisher.length > 0) {
+            console.log(`[SUCCESS] 通过正则表达式提取到出版社: ${extractedPublisher}`);
             data.publisher = [extractedPublisher];
+          } else {
+            console.log('[DEBUG] 提取的出版社为空字符串');
           }
         } else {
+          console.log('[DEBUG] 主正则未匹配，尝试备用模式...');
           // 尝试其他可能的模式
           const altMatch = html.match(/出版社[:：]\s*([^<\n]+)/);
           if (altMatch && altMatch[1]) {
             const altPublisher = altMatch[1].trim();
+            console.log(`[SUCCESS] 通过备用模式提取到出版社: ${altPublisher}`);
             data.publisher = [altPublisher];
+          } else {
+            console.log('[FAILED] 所有正则表达式都未匹配到出版社');
           }
         }
       } catch (error) {
-        console.log(`备用出版社提取失败: ${error.message}`);
+        console.log(`[ERROR] 备用出版社提取失败: ${error.message}`);
+        console.log(error.stack);
       }
+    } else {
+      console.log('[DEBUG] 条件不满足，跳过备用提取');
     }
 
     await browser.close();
@@ -805,8 +820,11 @@ function shouldRefreshItem(parsed, item) {
     return true;
   }
 
-  if (parsed.type === 'book' && !item.author) {
-    return true;
+  if (parsed.type === 'book') {
+    // 如果作者或出版社为空，需要刷新
+    if (!item.author || !item.publisher || item.publisher.length === 0) {
+      return true;
+    }
   }
 
   if (parsed.type === 'album' && !item.artist) {
