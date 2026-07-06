@@ -350,58 +350,66 @@ function getSocialIcon(platform) {
         viewer.dataset.activeView = key;
       };
 
-      const setActive = (key) => {
+      const setActive = (key, forceScroll = false) => {
         if (!key || !tabsMap[key]) return;
+        
+        const currentKey = getCurrentKey();
+        const isSameTab = currentKey === key;
         
         // 获取目标panel和它的第一个子元素（说明栏）
         const targetPanel = tabsMap[key];
         const firstChild = targetPanel.firstElementChild;
         const contentTabs = document.getElementById('content-tabs');
         
-        if (contentTabs && firstChild) {
-          const tabsRect = contentTabs.getBoundingClientRect();
-          const firstChildRect = firstChild.getBoundingClientRect();
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          
-          // 判断菜单栏是否处于sticky状态（在视口顶部附近）
-          const isTabsSticky = tabsRect.top >= -10 && tabsRect.top <= 20;
-          
-          if (isTabsSticky) {
-            // 菜单栏已在顶部，检查内容是否被遮挡
-            const tabsHeight = tabsRect.height;
-            
-            // 如果内容的顶部位置小于菜单栏高度+间距，说明被遮挡了
-            const isContentObscured = firstChildRect.top < tabsHeight + 20;
-            
-            if (isContentObscured) {
-              // 内容被遮挡，需要向上微调使内容显示在菜单栏下方
-              const targetScrollTop = scrollTop + firstChildRect.top - tabsHeight - 20;
-              
-              window.scrollTo({
-                top: Math.max(0, targetScrollTop),
-                behavior: 'smooth'
-              });
-            }
-            // 如果内容位置已经恰好，不做任何调整
-          } else {
-            // 菜单栏不在顶部，向下滚动使tabs到达视口顶部（与箭头按钮行为一致）
-            const targetScrollTop = tabsRect.top + scrollTop;
-            
-            if (Math.abs(tabsRect.top) > 10) {
-              window.scrollTo({
-                top: Math.max(0, targetScrollTop),
-                behavior: 'smooth'
-              });
-            }
-          }
-        }
-        
+        // 先切换tab内容
         tabs.forEach((tab) => tab.setAttribute('aria-selected', 'false'));
         panels.forEach((panel) => panel.removeAttribute('data-active'));
         tabsMap[key].setAttribute('data-active', 'true');
         const activeTab = tabs.find((t) => t.dataset.view === key);
         if (activeTab) activeTab.setAttribute('aria-selected', 'true');
         setCurrentKey(key);
+        
+        // 只有在以下情况才执行滚动：
+        // 1. forceScroll为true（明确需要滚动）
+        // 2. 切换到不同的tab且菜单栏不在顶部
+        // 3. 内容被菜单栏遮挡
+        if (contentTabs && firstChild) {
+          const tabsRect = contentTabs.getBoundingClientRect();
+          const firstChildRect = firstChild.getBoundingClientRect();
+          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          
+          // 判断菜单栏是否处于sticky状态
+          const isTabsSticky = tabsRect.top >= -10 && tabsRect.top <= 20;
+          
+          let shouldScroll = false;
+          let targetScrollTop = scrollTop;
+          
+          if (isTabsSticky) {
+            // 菜单栏已在顶部
+            const tabsHeight = tabsRect.height;
+            const isContentObscured = firstChildRect.top < tabsHeight + 20;
+            
+            if (isContentObscured || forceScroll) {
+              // 内容被遮挡或强制滚动，向上微调
+              shouldScroll = true;
+              targetScrollTop = scrollTop + firstChildRect.top - tabsHeight - 20;
+            }
+            // 如果内容位置已经恰好且不是强制滚动，不调整
+          } else {
+            // 菜单栏不在顶部，向下滚动使tabs到达视口顶部
+            if (!isSameTab || forceScroll) {
+              shouldScroll = true;
+              targetScrollTop = tabsRect.top + scrollTop;
+            }
+          }
+          
+          if (shouldScroll && Math.abs(targetScrollTop - scrollTop) > 5) {
+            window.scrollTo({
+              top: Math.max(0, targetScrollTop),
+              behavior: 'smooth'
+            });
+          }
+        }
       };
 
       const getCurrentKey = () => viewer.dataset.activeView || 'games';
@@ -416,10 +424,21 @@ function getSocialIcon(platform) {
       };
 
       tabs.forEach((tab) => {
-        tab.addEventListener('click', () => setActive(tab.dataset.view || 'games'));
+        tab.addEventListener('click', () => {
+          const clickedKey = tab.dataset.view || 'games';
+          const currentKey = getCurrentKey();
+          
+          // 如果点击的是当前已激活的tab，强制滚动到正确位置
+          if (clickedKey === currentKey) {
+            setActive(clickedKey, true);
+          } else {
+            // 切换到不同的tab，正常处理
+            setActive(clickedKey, false);
+          }
+        });
       });
 
-      setActive('games');
+      // 移除初始化时的setActive调用，避免刷新页面时自动滚动
     }
   });
 </script>
