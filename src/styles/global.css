@@ -1386,6 +1386,193 @@ img {
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* ============================================
+   游戏卡片 - 左右布局（适合2:3 Steam封面）
+   ============================================ */
+.showcase-card--games {
+  display: grid;
+  grid-template-columns: minmax(120px, 35%) minmax(0, 1fr);
+  width: 100%;
+  max-width: 600px;
+  min-height: 200px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  background: rgba(255, 252, 247, 0.12);
+  backdrop-filter: blur(12px) saturate(150%);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.showcase-card--games:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.showcase-card--games .entry-card__media {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 2 / 3;
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.04), rgba(29, 19, 15, 0.16)),
+    rgba(var(--theme-color-rgb), 0.12);
+  overflow: hidden;
+}
+
+.showcase-card--games .entry-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.showcase-card--games .entry-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  justify-content: center;
+}
+
+.showcase-card--games .entry-card__title {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  font-weight: 600;
+  color: #fff7ef;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.showcase-card--games .entry-card__desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255, 247, 239, 0.85);
+  margin: 0;
+}
+
+.showcase-card--games .entry-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: rgba(255, 247, 239, 0.75);
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.showcase-card--games .card-tag {
+  width: fit-content;
+  padding: 0.3rem 0.75rem;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 247, 239, 0.9);
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ============================================
+   电影卡片 - 上下布局（适配多种比例，不拉伸）
+   ============================================ */
+.showcase-card--movies {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  background: rgba(255, 252, 247, 0.12);
+  backdrop-filter: blur(12px) saturate(150%);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.showcase-card--movies:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.showcase-card--movies .entry-card__media {
+  width: 100%;
+  /* 不设置固定aspect-ratio，让图片自然高度决定 */
+  min-height: 180px;
+  max-height: 320px;
+  background:
+    linear-gradient(180deg, rgba(255, 252, 247, 0.04), rgba(29, 19, 15, 0.16)),
+    rgba(var(--theme-color-rgb), 0.12);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.showcase-card--movies .entry-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.showcase-card--movies .entry-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  flex: 1;
+}
+
+.showcase-card--movies .entry-card__title {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-weight: 600;
+  color: #fff7ef;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.showcase-card--movies .entry-card__desc {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: rgba(255, 247, 239, 0.85);
+  margin: 0;
+}
+
+.showcase-card--movies .entry-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.8rem;
+  color: rgba(255, 247, 239, 0.75);
+  margin-top: auto;
+  padding-top: 0.5rem;
+}
+
+.showcase-card--movies .card-tag {
+  width: fit-content;
+  padding: 0.3rem 0.75rem;
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 247, 239, 0.9);
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
 @media (max-width: 1024px) {
   .landing-hero {
     padding: 4rem 0 2rem;
@@ -1637,36 +1824,73 @@ img {
     font-size: 0.7rem;
   }
 
-  /* 移动端卡片优化 - Square（上下布局，适合近正方形封面） */
-  .showcase-card--square {
+  /* 移动端卡片优化 - Games（左右布局，2:3比例） */
+  .showcase-card--games {
+    grid-template-columns: minmax(100px, 30%) minmax(0, 1fr);
     max-width: 100%;
     border-radius: 12px;
+    min-height: 180px;
   }
 
-  .showcase-card--square .entry-card__media {
-    aspect-ratio: 1 / 1;
+  .showcase-card--games .entry-card__media {
+    aspect-ratio: 2 / 3;
   }
 
-  .showcase-card--square .entry-card__body {
-    padding: 0.875rem 1rem;
+  .showcase-card--games .entry-card__body {
+    padding: 0.75rem 1rem;
     gap: 0.4rem;
   }
 
-  .showcase-card--square .entry-card__title {
-    font-size: 1rem;
+  .showcase-card--games .entry-card__title {
+    font-size: 0.95rem;
   }
 
-  .showcase-card--square .entry-card__desc {
+  .showcase-card--games .entry-card__desc {
     -webkit-line-clamp: 3;
     font-size: 0.85rem;
   }
 
-  .showcase-card--square .entry-card__meta {
+  .showcase-card--games .entry-card__meta {
     font-size: 0.75rem;
     gap: 0.2rem;
   }
 
-  .showcase-card--square .card-tag {
+  .showcase-card--games .card-tag {
+    padding: 0.25rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  /* 移动端卡片优化 - Movies（上下布局，不拉伸） */
+  .showcase-card--movies {
+    max-width: 100%;
+    border-radius: 12px;
+  }
+
+  .showcase-card--movies .entry-card__media {
+    min-height: 160px;
+    max-height: 280px;
+  }
+
+  .showcase-card--movies .entry-card__body {
+    padding: 0.875rem 1rem;
+    gap: 0.4rem;
+  }
+
+  .showcase-card--movies .entry-card__title {
+    font-size: 1rem;
+  }
+
+  .showcase-card--movies .entry-card__desc {
+    -webkit-line-clamp: 3;
+    font-size: 0.85rem;
+  }
+
+  .showcase-card--movies .entry-card__meta {
+    font-size: 0.75rem;
+    gap: 0.2rem;
+  }
+
+  .showcase-card--movies .card-tag {
     padding: 0.25rem 0.6rem;
     font-size: 0.7rem;
   }
