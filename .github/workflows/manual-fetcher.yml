@@ -45,5 +45,5 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .
-          git commit -m "Auto-update logbook data [skip ci]" || exit 0
+          git commit -m "Auto-update logbook data" || exit 0
           git push origin main
