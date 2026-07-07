@@ -331,15 +331,18 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(5rem, 10vh, 8rem) 1rem clamp(4rem, 8vh, 6rem);
+  padding: clamp(4rem, 8vh, 7rem) 1rem clamp(3rem, 6vh, 5rem);
+  gap: clamp(1.5rem, 3vh, 2.5rem);
+  will-change: padding;
 }
 
 .profile-badge-wrapper {
   position: absolute;
-  top: clamp(3rem, 8vh, 8rem);
+  top: clamp(2rem, 6vh, 6rem);
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
+  transition: top 0.3s ease-out;
 }
 
 .profile-panel__badge {
@@ -380,10 +383,13 @@ img {
 }
 
 .profile-panel--landing {
-  width: min(90vw, 52rem);
-  max-width: 52rem;
+  width: fit-content;
+  max-width: min(90vw, 52rem);
+  min-width: min(280px, 90vw);
   margin: 0 auto;
   padding: clamp(1.5rem, 4vw, 3rem);
+  box-sizing: border-box;
+  transition: all 0.3s ease-out;
 }
 
 .profile-panel__header {
@@ -1018,7 +1024,9 @@ img {
 
 @media (max-width: 1024px) {
   .profile-panel--landing {
+    width: fit-content;
     max-width: min(90vw, 45rem);
+    min-width: min(260px, 85vw);
   }
 
   .landing-title {
@@ -1055,72 +1063,82 @@ img {
 /* 超矮屏幕优化（手机横屏、小笔记本）*/
 @media (max-height: 600px) {
   .profile-badge-wrapper {
-    top: 1.5rem;
+    top: 1rem;
+    transition: top 0.2s ease-out;
   }
 
   .landing-hero-content {
-    padding: clamp(3rem, 8vh, 4rem) 1rem clamp(2rem, 5vh, 3rem);
+    padding: 2.5rem 1rem 2rem;
     justify-content: flex-start;
+    gap: 1rem;
   }
 
   .hero-scroll-link {
-    bottom: 1rem;
-    width: 2.8rem;
-    height: 2.8rem;
+    bottom: 0.8rem;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 
   .hero-scroll-link__arrow {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 }
 
 /* 超高屏幕优化 */
 @media (min-height: 1200px) {
   .profile-badge-wrapper {
-    top: 10rem;
+    top: clamp(6rem, 8vh, 8rem);
+    transition: top 0.3s ease-out;
   }
 
   .landing-hero-content {
-    padding: 10rem 1rem 8rem;
+    padding: clamp(8rem, 12vh, 10rem) 1rem clamp(6rem, 10vh, 8rem);
   }
 }
 
 @media (min-height: 1400px) {
   .hero-scroll-link {
-    bottom: 4rem;
+    bottom: clamp(3rem, 5vh, 4rem);
   }
 }
 
 /* 超宽屏幕（21:9 带鱼屏）*/
 @media (min-aspect-ratio: 2/1) {
   .landing-hero-content {
-    padding: 6rem 15% 5rem;
+    padding: clamp(5rem, 8vh, 7rem) 15% clamp(4rem, 6vh, 6rem);
   }
 
   .profile-panel--landing {
-    max-width: min(85vw, 45rem);
+    width: fit-content;
+    max-width: min(75vw, 48rem);
   }
 }
 
 /* 超窄屏幕（手机竖屏）*/
 @media (max-aspect-ratio: 9/16) {
   .landing-hero-content {
-    padding: 5rem 1.5rem 4rem;
+    padding: clamp(4rem, 8vh, 5rem) 1.5rem clamp(3rem, 5vh, 4rem);
     justify-content: flex-start;
-    padding-top: 15vh;
+    gap: 1.5rem;
   }
 
   .profile-badge-wrapper {
     position: static;
     transform: none;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .profile-panel--landing {
+    width: 100%;
+    max-width: 100%;
+    min-width: unset;
   }
 }
 
 /* iPad 等中等比例屏幕 */
 @media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) {
   .landing-hero-content {
-    padding: 6rem 2rem 5rem;
+    padding: clamp(5rem, 8vh, 7rem) 2rem clamp(4rem, 6vh, 6rem);
   }
 }
 
@@ -1154,7 +1172,9 @@ img {
   }
 
   .profile-panel--landing {
-    max-width: min(95vw, 40rem);
+    width: min(95vw, 40rem);
+    max-width: 40rem;
+    min-width: 280px;
     padding: clamp(1rem, 3vw, 1.5rem);
   }
 
