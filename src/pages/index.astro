@@ -482,7 +482,7 @@ function getSocialIcon(platform) {
     });
   };
 
-  // 智能布局优化 - 确保元素始终在最佳位置
+  // 智能布局优化 - Homepage 标签根据空间自动调整位置
   const optimizeLayout = () => {
     const badge = document.querySelector('.profile-badge-wrapper');
     const panel = document.querySelector('.profile-panel--landing');
@@ -490,56 +490,33 @@ function getSocialIcon(platform) {
     
     if (!badge || !panel || !heroContent) return;
     
-    const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
-    const aspectRatio = viewportWidth / viewportHeight;
+    const panelRect = panel.getBoundingClientRect();
+    const heroContentRect = heroContent.getBoundingClientRect();
     
-    // 根据宽高比微调位置，确保连续平滑
-    let badgeTop = 6; // 默认 6vh
+    // 计算主体卡片顶部相对于 hero-content 的位置
+    const panelTopOffset = panelRect.top - heroContentRect.top;
     
-    // 超宽屏幕：稍微下移
-    if (aspectRatio > 2) {
-      badgeTop = 7;
+    // Homepage 标签需要的高度（包括自身高度 + 与卡片的间距）
+    const badgeHeight = badge.offsetHeight || 40;
+    const requiredSpace = badgeHeight + 20; // 20px 间距
+    
+    // 判断是否有足够空间在卡片上方显示
+    if (panelTopOffset >= requiredSpace) {
+      // 有足够空间：标签在卡片上方
+      badge.style.position = 'absolute';
+      badge.style.top = '-2.5rem';
+      badge.style.left = '50%';
+      badge.style.transform = 'translateX(-50%)';
+      badge.style.marginBottom = '0';
+    } else {
+      // 空间不足：标签移到第一屏顶部外面
+      badge.style.position = 'absolute';
+      badge.style.top = '-3rem'; // 移到视口外面
+      badge.style.left = '50%';
+      badge.style.transform = 'translateX(-50%)';
+      badge.style.marginBottom = '0';
     }
-    // 超窄屏幕：稍微上移
-    else if (aspectRatio < 0.6) {
-      badgeTop = 5;
-    }
-    
-    badge.style.top = `${badgeTop}vh`;
-    
-    // 卡片宽度优化
-    let panelWidth = Math.min(viewportWidth * 0.85, 720); // 85vw 或 45rem
-    
-    // 超宽屏幕：限制更严
-    if (aspectRatio > 2) {
-      panelWidth = Math.min(viewportWidth * 0.75, 640);
-    }
-    // 超窄屏幕：占满
-    else if (aspectRatio < 0.6) {
-      panelWidth = viewportWidth * 0.92;
-    }
-    
-    panel.style.width = `${panelWidth}px`;
-    panel.style.maxWidth = 'none'; // 移除 CSS 的 max-width 限制
-    
-    // 内容区域 padding 优化
-    let topPadding = viewportHeight * 0.08; // 8vh
-    let bottomPadding = viewportHeight * 0.06; // 6vh
-    
-    // 超矮屏幕：减少 padding
-    if (viewportHeight < 600) {
-      topPadding = viewportHeight * 0.05;
-      bottomPadding = viewportHeight * 0.04;
-    }
-    // 超高屏幕：增加 padding
-    else if (viewportHeight > 1200) {
-      topPadding = viewportHeight * 0.1;
-      bottomPadding = viewportHeight * 0.08;
-    }
-    
-    heroContent.style.paddingTop = `${topPadding}px`;
-    heroContent.style.paddingBottom = `${bottomPadding}px`;
   };
 
   // 初始化并监听变化
@@ -549,7 +526,7 @@ function getSocialIcon(platform) {
     resizeTimer = setTimeout(() => {
       fixMobileViewport();
       optimizeLayout();
-    }, 50); // 50ms 防抖，确保平滑
+    }, 50); // 50ms 防抖
   };
 
   window.addEventListener('resize', handleResize);
@@ -558,6 +535,9 @@ function getSocialIcon(platform) {
   });
   
   // 初始执行
+  window.addEventListener('load', () => {
+    setTimeout(handleResize, 100);
+  });
   handleResize();
 
   fixMobileViewport();

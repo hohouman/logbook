@@ -331,13 +331,12 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 8vh 1rem 6vh;
-  gap: 2.5vh;
+  padding: 2rem 1rem;
 }
 
 .profile-badge-wrapper {
   position: absolute;
-  top: 6vh;
+  top: -2.5rem;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -378,14 +377,14 @@ img {
 
 .profile-panel {
   display: grid;
-  gap: clamp(0.75rem, 2vh, 1.5rem);
+  gap: 1rem;
 }
 
 .profile-panel--landing {
-  width: min(85vw, 45rem);
-  max-width: min(85vw, 45rem);
+  position: relative;
+  width: min(85vw, 52rem);
   margin: 0 auto;
-  padding: 3vh 4vw;
+  padding: clamp(1.5rem, 4vw, 3rem);
   box-sizing: border-box;
 }
 
@@ -396,10 +395,8 @@ img {
 }
 
 .profile-avatar {
-  width: 7vw;
-  height: 7vw;
-  max-width: 6.5rem;
-  min-width: 4rem;
+  width: clamp(5rem, 10vw, 6.5rem);
+  height: clamp(5rem, 10vw, 6.5rem);
   border-radius: 24px;
   object-fit: cover;
   border: 2px solid rgba(255, 247, 239, 0.28);
@@ -409,7 +406,7 @@ img {
 .landing-title {
   margin: 0;
   font-family: 'Noto Serif SC', 'Inter', serif;
-  font-size: calc(2rem + 3vw + 1vh);
+  font-size: clamp(2.5rem, 8vw, 5.2rem);
   line-height: 0.95;
   letter-spacing: -0.05em;
   color: #fff7ef;
@@ -431,16 +428,16 @@ img {
 
 .landing-bio {
   margin: 0;
-  max-width: 80vw;
+  max-width: 40rem;
   color: rgba(255, 247, 239, 0.86);
-  font-size: calc(0.9rem + 0.8vw + 0.3vh);
+  font-size: clamp(1rem, 1.7vw, 1.15rem);
 }
 
 .social-icon-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1.2vw;
+  gap: 0.8rem;
 }
 
 .social-icon-button {
@@ -583,17 +580,13 @@ img {
 .hero-scroll-link {
   position: absolute;
   left: 50%;
-  bottom: 3vh;
+  bottom: 2rem;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 4.5vh;
-  height: 4.5vh;
-  min-width: 2.8rem;
-  min-height: 2.8rem;
-  max-width: 3.5rem;
-  max-height: 3.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
   border-radius: 999px;
   border: 1px solid rgba(var(--theme-color-rgb), 0.28);
   background: rgba(29, 19, 15, 0.65);
@@ -608,7 +601,7 @@ img {
 }
 
 .hero-scroll-link__arrow {
-  font-size: calc(1rem + 0.4vh);
+  font-size: 1.4rem;
   line-height: 1;
 }
 
@@ -1026,16 +1019,15 @@ img {
 
 @media (max-width: 1024px) {
   .profile-panel--landing {
-    width: min(88vw, 42rem);
-    padding: 2.5vh 3.5vw;
+    max-width: 90%;
   }
 
   .landing-title {
-    font-size: calc(1.8rem + 4vw);
+    font-size: clamp(2rem, 6vw, 3.5rem);
   }
 
   .landing-bio {
-    font-size: calc(0.85rem + 1vw);
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
   }
 }
 
@@ -1073,8 +1065,7 @@ img {
   }
 
   .landing-hero-content {
-    padding: 5vh 1rem 4vh;
-    gap: 2vh;
+    padding: 3rem 0 1.5rem;
   }
 
   .landing-hero__grid {
@@ -1082,24 +1073,21 @@ img {
   }
 
   .profile-panel--landing {
-    width: 92vw;
-    max-width: 38rem;
-    padding: 2vh 3vw;
+    max-width: 95%;
+    padding: 1rem;
   }
 
   .profile-avatar {
-    width: 10vw;
-    height: 10vw;
-    max-width: 4rem;
-    min-width: 3.5rem;
+    width: 4rem;
+    height: 4rem;
   }
 
   .landing-title {
-    font-size: calc(1.6rem + 6vw);
+    font-size: clamp(1.8rem, 8vw, 2.5rem);
   }
 
   .landing-bio {
-    font-size: calc(0.8rem + 2vw);
+    font-size: 0.85rem;
     line-height: 1.5;
   }
 
