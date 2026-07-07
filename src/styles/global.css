@@ -615,6 +615,7 @@ img {
   backdrop-filter: blur(12px);
   transition: transform 0.2s ease, background-color 0.2s ease, bottom 0.3s ease;
   z-index: 20;
+  cursor: pointer;
 }
 
 .hero-scroll-link:hover {
