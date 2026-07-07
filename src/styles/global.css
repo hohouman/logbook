@@ -331,14 +331,13 @@ img {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(4rem, 8vh, 7rem) 1rem clamp(3rem, 6vh, 5rem);
-  gap: clamp(1.5rem, 3vh, 2.5rem);
-  will-change: padding;
+  padding: 8vh 1rem 6vh;
+  gap: 2.5vh;
 }
 
 .profile-badge-wrapper {
   position: absolute;
-  top: clamp(2rem, 6vh, 6rem);
+  top: 6vh;
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -383,13 +382,11 @@ img {
 }
 
 .profile-panel--landing {
-  width: fit-content;
-  max-width: min(90vw, 52rem);
-  min-width: min(280px, 90vw);
+  width: min(85vw, 45rem);
+  max-width: min(85vw, 45rem);
   margin: 0 auto;
-  padding: clamp(1.5rem, 4vw, 3rem);
+  padding: 3vh 4vw;
   box-sizing: border-box;
-  transition: all 0.3s ease-out;
 }
 
 .profile-panel__header {
@@ -399,8 +396,10 @@ img {
 }
 
 .profile-avatar {
-  width: clamp(4rem, 8vw, 6.5rem);
-  height: clamp(4rem, 8vw, 6.5rem);
+  width: 7vw;
+  height: 7vw;
+  max-width: 6.5rem;
+  min-width: 4rem;
   border-radius: 24px;
   object-fit: cover;
   border: 2px solid rgba(255, 247, 239, 0.28);
@@ -410,7 +409,7 @@ img {
 .landing-title {
   margin: 0;
   font-family: 'Noto Serif SC', 'Inter', serif;
-  font-size: clamp(2rem, 5vw + 1vh, 5.2rem);
+  font-size: calc(2rem + 3vw + 1vh);
   line-height: 0.95;
   letter-spacing: -0.05em;
   color: #fff7ef;
@@ -432,16 +431,16 @@ img {
 
 .landing-bio {
   margin: 0;
-  max-width: min(40rem, 85vw);
+  max-width: 80vw;
   color: rgba(255, 247, 239, 0.86);
-  font-size: clamp(0.95rem, 1.2vw + 0.5vh, 1.15rem);
+  font-size: calc(0.9rem + 0.8vw + 0.3vh);
 }
 
 .social-icon-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: clamp(0.6rem, 1.5vw, 0.8rem);
+  gap: 1.2vw;
 }
 
 .social-icon-button {
@@ -584,19 +583,22 @@ img {
 .hero-scroll-link {
   position: absolute;
   left: 50%;
-  bottom: clamp(1.5rem, 4vh, 3rem);
+  bottom: 3vh;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 3.5rem;
-  height: 3.5rem;
+  width: 4.5vh;
+  height: 4.5vh;
+  min-width: 2.8rem;
+  min-height: 2.8rem;
+  max-width: 3.5rem;
+  max-height: 3.5rem;
   border-radius: 999px;
   border: 1px solid rgba(var(--theme-color-rgb), 0.28);
   background: rgba(29, 19, 15, 0.65);
   color: #fff7ef;
   backdrop-filter: blur(12px);
-  transition: transform 0.2s ease, background-color 0.2s ease, bottom 0.3s ease;
   z-index: 20;
 }
 
@@ -606,7 +608,7 @@ img {
 }
 
 .hero-scroll-link__arrow {
-  font-size: 1.4rem;
+  font-size: calc(1rem + 0.4vh);
   line-height: 1;
 }
 
@@ -1024,17 +1026,16 @@ img {
 
 @media (max-width: 1024px) {
   .profile-panel--landing {
-    width: fit-content;
-    max-width: min(90vw, 45rem);
-    min-width: min(260px, 85vw);
+    width: min(88vw, 42rem);
+    padding: 2.5vh 3.5vw;
   }
 
   .landing-title {
-    font-size: clamp(2rem, 6vw, 3.5rem);
+    font-size: calc(1.8rem + 4vw);
   }
 
   .landing-bio {
-    font-size: clamp(0.9rem, 1.5vw, 1rem);
+    font-size: calc(0.85rem + 1vw);
   }
 }
 
@@ -1061,98 +1062,6 @@ img {
 }
 
 /* 超矮屏幕优化（手机横屏、小笔记本）*/
-@media (max-height: 600px) {
-  .profile-badge-wrapper {
-    top: 1rem;
-    transition: top 0.2s ease-out;
-  }
-
-  .landing-hero-content {
-    padding: 2.5rem 1rem 2rem;
-    justify-content: flex-start;
-    gap: 1rem;
-  }
-
-  .hero-scroll-link {
-    bottom: 0.8rem;
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-
-  .hero-scroll-link__arrow {
-    font-size: 1rem;
-  }
-}
-
-/* 超高屏幕优化 */
-@media (min-height: 1200px) {
-  .profile-badge-wrapper {
-    top: clamp(6rem, 8vh, 8rem);
-    transition: top 0.3s ease-out;
-  }
-
-  .landing-hero-content {
-    padding: clamp(8rem, 12vh, 10rem) 1rem clamp(6rem, 10vh, 8rem);
-  }
-}
-
-@media (min-height: 1400px) {
-  .hero-scroll-link {
-    bottom: clamp(3rem, 5vh, 4rem);
-  }
-}
-
-/* 超宽屏幕（21:9 带鱼屏）*/
-@media (min-aspect-ratio: 2/1) {
-  .landing-hero-content {
-    padding: clamp(5rem, 8vh, 7rem) 15% clamp(4rem, 6vh, 6rem);
-  }
-
-  .profile-panel--landing {
-    width: fit-content;
-    max-width: min(75vw, 48rem);
-  }
-}
-
-/* 超窄屏幕（手机竖屏）*/
-@media (max-aspect-ratio: 9/16) {
-  .landing-hero-content {
-    padding: clamp(4rem, 8vh, 5rem) 1.5rem clamp(3rem, 5vh, 4rem);
-    justify-content: flex-start;
-    gap: 1.5rem;
-  }
-
-  .profile-badge-wrapper {
-    position: static;
-    transform: none;
-    margin-bottom: 1.5rem;
-  }
-
-  .profile-panel--landing {
-    width: 100%;
-    max-width: 100%;
-    min-width: unset;
-  }
-}
-
-/* iPad 等中等比例屏幕 */
-@media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 4/3) {
-  .landing-hero-content {
-    padding: clamp(5rem, 8vh, 7rem) 2rem clamp(4rem, 6vh, 6rem);
-  }
-}
-
-@media (max-height: 700px) {
-  .hero-scroll-link {
-    bottom: 1rem;
-    width: 2.8rem;
-    height: 2.8rem;
-  }
-
-  .hero-scroll-link__arrow {
-    font-size: 1.1rem;
-  }
-}
 
 @media (max-width: 720px) {
   .hero-banner {
@@ -1164,7 +1073,8 @@ img {
   }
 
   .landing-hero-content {
-    padding: clamp(3rem, 8vh, 4rem) 1rem clamp(2rem, 5vh, 3rem);
+    padding: 5vh 1rem 4vh;
+    gap: 2vh;
   }
 
   .landing-hero__grid {
@@ -1172,23 +1082,24 @@ img {
   }
 
   .profile-panel--landing {
-    width: min(95vw, 40rem);
-    max-width: 40rem;
-    min-width: 280px;
-    padding: clamp(1rem, 3vw, 1.5rem);
+    width: 92vw;
+    max-width: 38rem;
+    padding: 2vh 3vw;
   }
 
   .profile-avatar {
-    width: clamp(3.5rem, 10vw, 4rem);
-    height: clamp(3.5rem, 10vw, 4rem);
+    width: 10vw;
+    height: 10vw;
+    max-width: 4rem;
+    min-width: 3.5rem;
   }
 
   .landing-title {
-    font-size: clamp(1.8rem, 8vw, 2.5rem);
+    font-size: calc(1.6rem + 6vw);
   }
 
   .landing-bio {
-    font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+    font-size: calc(0.8rem + 2vw);
     line-height: 1.5;
   }
 

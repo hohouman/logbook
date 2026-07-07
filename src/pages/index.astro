@@ -482,5 +482,83 @@ function getSocialIcon(platform) {
     });
   };
 
+  // 智能布局优化 - 确保元素始终在最佳位置
+  const optimizeLayout = () => {
+    const badge = document.querySelector('.profile-badge-wrapper');
+    const panel = document.querySelector('.profile-panel--landing');
+    const heroContent = document.querySelector('.landing-hero-content');
+    
+    if (!badge || !panel || !heroContent) return;
+    
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const aspectRatio = viewportWidth / viewportHeight;
+    
+    // 根据宽高比微调位置，确保连续平滑
+    let badgeTop = 6; // 默认 6vh
+    
+    // 超宽屏幕：稍微下移
+    if (aspectRatio > 2) {
+      badgeTop = 7;
+    }
+    // 超窄屏幕：稍微上移
+    else if (aspectRatio < 0.6) {
+      badgeTop = 5;
+    }
+    
+    badge.style.top = `${badgeTop}vh`;
+    
+    // 卡片宽度优化
+    let panelWidth = Math.min(viewportWidth * 0.85, 720); // 85vw 或 45rem
+    
+    // 超宽屏幕：限制更严
+    if (aspectRatio > 2) {
+      panelWidth = Math.min(viewportWidth * 0.75, 640);
+    }
+    // 超窄屏幕：占满
+    else if (aspectRatio < 0.6) {
+      panelWidth = viewportWidth * 0.92;
+    }
+    
+    panel.style.width = `${panelWidth}px`;
+    panel.style.maxWidth = 'none'; // 移除 CSS 的 max-width 限制
+    
+    // 内容区域 padding 优化
+    let topPadding = viewportHeight * 0.08; // 8vh
+    let bottomPadding = viewportHeight * 0.06; // 6vh
+    
+    // 超矮屏幕：减少 padding
+    if (viewportHeight < 600) {
+      topPadding = viewportHeight * 0.05;
+      bottomPadding = viewportHeight * 0.04;
+    }
+    // 超高屏幕：增加 padding
+    else if (viewportHeight > 1200) {
+      topPadding = viewportHeight * 0.1;
+      bottomPadding = viewportHeight * 0.08;
+    }
+    
+    heroContent.style.paddingTop = `${topPadding}px`;
+    heroContent.style.paddingBottom = `${bottomPadding}px`;
+  };
+
+  // 初始化并监听变化
+  let resizeTimer;
+  const handleResize = () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      fixMobileViewport();
+      optimizeLayout();
+    }, 50); // 50ms 防抖，确保平滑
+  };
+
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('orientationchange', () => {
+    setTimeout(handleResize, 100);
+  });
+  
+  // 初始执行
+  handleResize();
+
   fixMobileViewport();
 </script>
