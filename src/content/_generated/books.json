@@ -122,26 +122,6 @@
     "localCoverPath": "/generated/book_27666929_cover.webp"
   },
   {
-    "id": "6953273",
-    "title": "盗墓笔记",
-    "developer": [],
-    "director": [],
-    "author": [
-      "南派三叔"
-    ],
-    "artist": [],
-    "publisher": [
-      "上海文化出版社"
-    ],
-    "releaseDate": "2011-12-1",
-    "description": "",
-    "coverUrl": "https://img1.doubanio.com/view/subject/s/public/s10412319.jpg",
-    "type": "book",
-    "platform": "douban",
-    "url": "https://book.douban.com/subject/6953273/",
-    "localCoverPath": "/generated/book_6953273_cover.webp"
-  },
-  {
     "id": "26314932",
     "title": "言叶之庭",
     "developer": [],
@@ -834,26 +814,6 @@
     "localCoverPath": "/generated/book_26423329_cover.webp"
   },
   {
-    "id": "10767124",
-    "title": "乡村教师",
-    "developer": [],
-    "director": [],
-    "author": [
-      "刘慈欣"
-    ],
-    "artist": [],
-    "publisher": [
-      "长江文艺出版社"
-    ],
-    "releaseDate": "2012-9-1",
-    "description": "1、本土科幻名家，均多次获得科幻最高奖“银河奖”，本土科幻的代表人物。 2、作家自选集，收录作者各个时期创作的代表作。 3、刘慈欣的《乡村教师》被改编成电影，下半年上映。 4、书中附有作者近照和亲笔题字签名（手写印刷），收录作者的创作年表和获奖情况等资料，制作精良，可作为科幻迷的收藏版本。",
-    "coverUrl": "https://img1.doubanio.com/view/subject/s/public/s24493339.jpg",
-    "type": "book",
-    "platform": "douban",
-    "url": "https://book.douban.com/subject/10767124/",
-    "localCoverPath": null
-  },
-  {
     "id": "6784976",
     "title": "圣女的救济",
     "developer": [],
@@ -1143,26 +1103,6 @@
     "localCoverPath": "/generated/book_10816088_cover.webp"
   },
   {
-    "id": "23780663",
-    "title": "假面山莊殺人事件",
-    "developer": [],
-    "director": [],
-    "author": [
-      "東野圭吾"
-    ],
-    "artist": [],
-    "publisher": [
-      "皇冠"
-    ],
-    "releaseDate": "2013-4-29",
-    "description": "想不想徹底被騙一次？ 東野圭吾最高明的騙局！和《嫌疑犯Ｘ的獻身》相提並論的最高傑作！ 日本熱銷突破60萬冊！亞馬遜書店讀者★★★★壓倒性好評！ 愛一個人的極致是什麼？為了他，你可以戴上多少假面？ 恨一個人的意志是什麼？只靠「殺意」，真的就可以殺人嗎？ 兩個逃亡中的銀行搶匪闖入了深山裡的別墅，八名男女被迫成為人質。他們聚集在這裡，原本是為了在婚禮前夕意外身亡的新娘朋美，八個人中有朋美的未婚夫、父母、表妹以及好友。 在這座完全與外界斷絕聯絡的山莊裡，他們試圖逃脫，卻因為有內鬼破壞計畫，最後都告失敗。而在一片恐懼和緊張中，有人慘遭殺害，但根據現場狀況研判，卻並非兩名搶匪所為。究竟誰是內鬼？誰是兇手？朋美又真的是單純的意外死亡嗎？剩下的七個人疑神疑鬼，彼此猜忌，互相牽制，他們就像被困在蛛網上的獵物，只能等待真相用最激烈的手段反噬……",
-    "coverUrl": "https://img1.doubanio.com/view/subject/s/public/s26334320.jpg",
-    "type": "book",
-    "platform": "douban",
-    "url": "https://book.douban.com/subject/23780663/",
-    "localCoverPath": null
-  },
-  {
     "id": "3744282",
     "title": "分身",
     "developer": [],
@@ -1243,5 +1183,65 @@
     "platform": "douban",
     "url": "https://book.douban.com/subject/1192090/",
     "localCoverPath": "/generated/book_1192090_cover.webp"
+  },
+  {
+    "id": "6953273",
+    "title": "盗墓笔记",
+    "developer": [],
+    "director": [],
+    "author": [
+      "南派三叔"
+    ],
+    "artist": [],
+    "publisher": [
+      "上海文化出版社"
+    ],
+    "releaseDate": "2011-12-1",
+    "description": "",
+    "coverUrl": "https://img1.doubanio.com/view/subject/s/public/s10412319.jpg",
+    "type": "book",
+    "platform": "douban",
+    "url": "https://book.douban.com/subject/6953273/",
+    "localCoverPath": "/generated/book_6953273_cover.webp"
+  },
+  {
+    "id": "10767124",
+    "title": "乡村教师",
+    "developer": [],
+    "director": [],
+    "author": [
+      "刘慈欣"
+    ],
+    "artist": [],
+    "publisher": [
+      "长江文艺出版社"
+    ],
+    "releaseDate": "2012-9-1",
+    "description": "1、本土科幻名家，均多次获得科幻最高奖“银河奖”，本土科幻的代表人物。 2、作家自选集，收录作者各个时期创作的代表作。 3、刘慈欣的《乡村教师》被改编成电影，下半年上映。 4、书中附有作者近照和亲笔题字签名（手写印刷），收录作者的创作年表和获奖情况等资料，制作精良，可作为科幻迷的收藏版本。",
+    "coverUrl": "https://img1.doubanio.com/view/subject/s/public/s24493339.jpg",
+    "type": "book",
+    "platform": "douban",
+    "url": "https://book.douban.com/subject/10767124/",
+    "localCoverPath": null
+  },
+  {
+    "id": "23780663",
+    "title": "假面山莊殺人事件",
+    "developer": [],
+    "director": [],
+    "author": [
+      "東野圭吾"
+    ],
+    "artist": [],
+    "publisher": [
+      "皇冠"
+    ],
+    "releaseDate": "2013-4-29",
+    "description": "想不想徹底被騙一次？ 東野圭吾最高明的騙局！和《嫌疑犯Ｘ的獻身》相提並論的最高傑作！ 日本熱銷突破60萬冊！亞馬遜書店讀者★★★★壓倒性好評！ 愛一個人的極致是什麼？為了他，你可以戴上多少假面？ 恨一個人的意志是什麼？只靠「殺意」，真的就可以殺人嗎？ 兩個逃亡中的銀行搶匪闖入了深山裡的別墅，八名男女被迫成為人質。他們聚集在這裡，原本是為了在婚禮前夕意外身亡的新娘朋美，八個人中有朋美的未婚夫、父母、表妹以及好友。 在這座完全與外界斷絕聯絡的山莊裡，他們試圖逃脫，卻因為有內鬼破壞計畫，最後都告失敗。而在一片恐懼和緊張中，有人慘遭殺害，但根據現場狀況研判，卻並非兩名搶匪所為。究竟誰是內鬼？誰是兇手？朋美又真的是單純的意外死亡嗎？剩下的七個人疑神疑鬼，彼此猜忌，互相牽制，他們就像被困在蛛網上的獵物，只能等待真相用最激烈的手段反噬……",
+    "coverUrl": "https://img1.doubanio.com/view/subject/s/public/s26334320.jpg",
+    "type": "book",
+    "platform": "douban",
+    "url": "https://book.douban.com/subject/23780663/",
+    "localCoverPath": null
   }
 ]
