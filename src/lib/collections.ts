@@ -1,3 +1,4 @@
+/// <reference types="astro/client" />
 const generatedModules = import.meta.glob('../content/_generated/*.json', { eager: true }) as Record<
   string,
   { default: unknown }
@@ -230,13 +231,26 @@ export const collectionList = [
   collections.albums,
 ];
 
-/** “其他”面板的共享文案（首页与 other 页共用，避免重复硬编码） */
+/**
+ * “其他”面板的共享文案（首页、other 页、导航共用，单一来源避免重复硬编码）。
+ * 字段与集合配置 CollectionConfig 对齐：titleEn/chips 对应 hero，libEyebrow/libTitle 对应 section。
+ */
 export const OTHER_SECTION = {
   key: 'other',
   navLabel: '其他',
   eyebrow: 'Other',
+  /** hero 大标题（与集合页 titleEn 对齐） */
+  titleEn: 'Other Interests',
+  /** hero 副标题（中文） */
   title: '看起来，你想要更加了解我……',
+  /** 首屏描述 */
   desc: 'More about me.',
+  /** hero 胶囊（与集合页 chips 对齐） */
+  chips: ['Music', 'Travel', 'Tech'],
+  /** 独立页 section eyebrow */
+  libEyebrow: 'Notes',
+  /** 独立页 section 标题 */
+  libTitle: 'My Other Interests',
 } as const;
 
 /** 生成数据始终是数组；非数组（理论上不会）时回退为空数组 */

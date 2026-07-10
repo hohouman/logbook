@@ -3,32 +3,33 @@ name: Manual Logbook Data Fetcher
 on:
   workflow_dispatch: # 仅允许手动触发
 
+# 防止并发的手动运行互相覆盖对方的提交
+concurrency:
+  group: fetch-data
+  cancel-in-progress: false
+
 jobs:
   fetch-data:
     runs-on: ubuntu-latest
-    
+
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write # 仅本工作流所需：提交并推送生成的抓取数据
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: '24'
+          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
 
       - name: Run metadata fetch script
         run: node ./scripts/fetch-metadata.js
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Check for changes
         id: changes
@@ -44,6 +45,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add .
-          git commit -m "Auto-update logbook data" || exit 0
-          git push origin main
+          git add src/content/_generated public/generated
+          git commit -m "Auto-update logbook data"
+          git push origin ${{ github.ref_name }}

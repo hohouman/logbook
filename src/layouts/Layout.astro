@@ -3,7 +3,7 @@ import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
 import profile from '../config/profile.json';
-import { collectionList } from '../lib/collections';
+import { collectionList, OTHER_SECTION } from '../lib/collections';
 
 interface Props {
   title?: string;
@@ -24,7 +24,7 @@ const pageFrameClass = heroFullscreen
 
 const navItems = [
   ...collectionList.map((config) => ({ href: `/${config.key}`, label: config.navLabel })),
-  { href: '/other', label: '其他' },
+  { href: `/${OTHER_SECTION.key}`, label: OTHER_SECTION.navLabel },
 ];
 ---
 

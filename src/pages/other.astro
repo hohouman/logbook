@@ -5,23 +5,21 @@ import profile from '../config/profile.json';
 import { OTHER_SECTION } from '../lib/collections';
 ---
 
-<Layout title="Other" wallpaper={profile.wallpaper}>
+<Layout title={OTHER_SECTION.titleEn} wallpaper={profile.wallpaper}>
   <div slot="hero" class="page-hero">
-    <p class="page-kicker">Collection / Other</p>
-    <h1>Other Interests</h1>
+    <p class="page-kicker">Collection / {OTHER_SECTION.titleEn}</p>
+    <h1>{OTHER_SECTION.titleEn}</h1>
     <p>{OTHER_SECTION.title}</p>
     <div class="pill-row">
-      <span class="stat-chip">Music</span>
-      <span class="stat-chip">Travel</span>
-      <span class="stat-chip">Tech</span>
+      {OTHER_SECTION.chips.map((chip) => <span class="stat-chip">{chip}</span>)}
     </div>
   </div>
 
   <section class="section-block">
     <div class="section-heading">
       <div>
-        <p class="section-eyebrow">Notes</p>
-        <h2 class="section-title">My Other Interests</h2>
+        <p class="section-eyebrow">{OTHER_SECTION.libEyebrow}</p>
+        <h2 class="section-title">{OTHER_SECTION.libTitle}</h2>
       </div>
       <p class="section-lead">{OTHER_SECTION.title}</p>
     </div>
