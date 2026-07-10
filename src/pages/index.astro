@@ -70,7 +70,7 @@ function getSocialIcon(platform: string): string {
 
   <section class="stack home-stage" id="collections">
     <div class="content-stage">
-      <div class="content-tabs" id="content-tabs" role="tablist" aria-label="内容切换">
+      <div class="glass-panel glass-panel--acrylic content-tabs" id="content-tabs" role="tablist" aria-label="内容切换">
         {viewerTabs.map((tab, index) => (
           <button type="button" class="content-tab" role="tab" aria-selected={index === 0 ? 'true' : 'false'} data-view={tab.key}>
             {tab.label}
@@ -78,7 +78,7 @@ function getSocialIcon(platform: string): string {
         ))}
       </div>
 
-      <div class="content-viewer" data-content-viewer>
+      <div class="content-viewer" data-content-viewer data-active-view="games">
         <div class="content-viewer__panels">
           {panels.map(({ config, items }, index) => (
             <section class="content-panel" data-panel={config.key} data-active={index === 0 ? 'true' : undefined}>
@@ -112,7 +112,7 @@ function getSocialIcon(platform: string): string {
               <h3>{OTHER_SECTION.title}</h3>
               <p>{OTHER_SECTION.desc}</p>
             </div>
-            <div class="prose-card">
+            <div class="glass-panel prose-card">
               <OtherContent />
             </div>
           </section>

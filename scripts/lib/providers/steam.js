@@ -8,9 +8,7 @@ const LANGUAGES = ['schinese', 'tchinese', ''];
 export async function getSteamData(appId, url) {
   for (const lang of LANGUAGES) {
     try {
-      const apiUrl = lang
-        ? `https://store.steampowered.com/api/appdetails?appids=${appId}&l=${lang}`
-        : `https://store.steampowered.com/api/appdetails?appids=${appId}`;
+      const apiUrl = `https://store.steampowered.com/api/appdetails?appids=${appId}${lang ? `&l=${lang}` : ''}`;
 
       const response = await fetch(apiUrl);
       const data = await response.json();

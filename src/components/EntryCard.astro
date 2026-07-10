@@ -5,7 +5,7 @@ interface Props {
   item: MediaItem;
   tag: string;
   variant: 'portrait' | 'square';
-  coverKeys: (keyof MediaItem)[];
+  coverKeys: string[];
   metaFields: MetaField[];
   descFallback?: string;
 }
@@ -14,11 +14,13 @@ import { asText, hasValue } from '../utils/format';
 
 const { item, tag, variant, coverKeys, metaFields, descFallback } = Astro.props;
 
-const cover = coverKeys.map((key) => item[key]).find(hasValue) as string | undefined;
+// 领域字段由 metaFields / coverKeys 配置驱动，按字符串键索引联合类型
+const fields = item as unknown as Record<string, unknown>;
+const cover = coverKeys.map((key) => fields[key]).find(hasValue) as string | undefined;
 
 const metas = metaFields
   .map((field) => {
-    const raw = field.keys.map((key) => item[key]).find(hasValue);
+    const raw = field.keys.map((key) => fields[key]).find(hasValue);
     const value = asText(raw) || field.fallback || '';
     return value ? { label: field.label, value } : null;
   })

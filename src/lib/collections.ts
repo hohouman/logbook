@@ -9,15 +9,12 @@ function loadGenerated(key: string): unknown {
   return mod ? mod.default : [];
 }
 
-/** 单条媒体条目（游戏 / 电影 / 书籍 / 专辑） */
-export interface MediaItem {
+/* ----------------------------- 领域数据模型 ----------------------------- */
+
+/** 所有媒体条目的公共字段（游戏 / 电影 / 书籍 / 专辑 共享） */
+interface MediaBase {
   id: string;
   title: string;
-  developer?: string[];
-  publisher?: string[];
-  director?: string[];
-  author?: string[];
-  artist?: string[];
   releaseDate?: string;
   description?: string;
   coverUrl?: string;
@@ -29,20 +26,53 @@ export interface MediaItem {
   url?: string;
 }
 
+/** 游戏：开发商 / 发行商 */
+export interface GameItem extends MediaBase {
+  type?: 'game';
+  developer?: string[];
+  publisher?: string[];
+}
+
+/** 电影：导演 */
+export interface MovieItem extends MediaBase {
+  type?: 'movie';
+  director?: string[];
+}
+
+/** 书籍：作者 / 发行商 */
+export interface BookItem extends MediaBase {
+  type?: 'book';
+  author?: string[];
+  publisher?: string[];
+}
+
+/** 专辑：艺人 / 发行商 */
+export interface AlbumItem extends MediaBase {
+  type?: 'album';
+  artist?: string[];
+  publisher?: string[];
+}
+
+/** 渲染层联合类型（卡片通过 metaFields / coverKeys 配置决定展示哪些字段） */
+export type MediaItem = GameItem | MovieItem | BookItem | AlbumItem;
+
+/* ----------------------------- 集合配置 ----------------------------- */
+
 /**
  * 一条卡片 meta 字段的描述。
- * - keys 按优先级取第一个有值的字段
+ * - keys 按优先级取第一个有值的字段（字符串键，支持各集合的领域字段）
  * - 有 fallback 时始终显示（用 fallback 兜底）；无 fallback 时仅在有值时显示
  */
 export interface MetaField {
   label: string;
-  keys: (keyof MediaItem)[];
+  keys: string[];
   fallback?: string;
 }
 
 export type CollectionKey = 'games' | 'movies' | 'books' | 'albums';
 
-export interface CollectionConfig {
+/** 单个集合的展示配置，数据强类型化为对应的领域条目 T */
+export interface CollectionConfig<T extends MediaItem = MediaItem> {
   key: CollectionKey;
   /** 导航与标签页文案（中文） */
   navLabel: string;
@@ -54,8 +84,8 @@ export interface CollectionConfig {
   tag: string;
   /** 卡片版式 */
   variant: 'portrait' | 'square';
-  /** 封面来源字段，按优先级取第一个有值的 */
-  coverKeys: (keyof MediaItem)[];
+  /** 封面来源字段，按优先级取第一个有值的（字符串键，支持各集合领域字段） */
+  coverKeys: string[];
   /** 卡片 meta 字段 */
   metaFields: MetaField[];
   /** 描述缺省文案 */
@@ -72,15 +102,15 @@ export interface CollectionConfig {
   showCount: boolean;
   /** 空集合提示 */
   emptyText: string;
-  /** 原始数据 */
-  data: unknown;
+  /** 原始数据（领域强类型） */
+  data: T[];
   /** 无数据时的占位条目 */
-  fallbackItems?: MediaItem[];
+  fallbackItems?: T[];
 }
 
 const RELEASE: MetaField = { label: 'Release', keys: ['releaseDate'], fallback: 'TBA' };
 
-export const collections: Record<CollectionKey, CollectionConfig> = {
+export const collections = {
   games: {
     key: 'games',
     navLabel: '游戏',
@@ -101,8 +131,9 @@ export const collections: Record<CollectionKey, CollectionConfig> = {
     chips: ['Steam', 'Cover-first layout'],
     showCount: true,
     emptyText: 'No games added yet. Check back later!',
-    data: loadGenerated('games'),
-  },
+    data: loadGenerated('games') as GameItem[],
+  } as CollectionConfig<GameItem>,
+
   movies: {
     key: 'movies',
     navLabel: '电影',
@@ -122,8 +153,9 @@ export const collections: Record<CollectionKey, CollectionConfig> = {
     chips: ['Poster-led cards', 'Cinematic spacing'],
     showCount: true,
     emptyText: 'No movies added yet. Check back later!',
-    data: loadGenerated('movies'),
-  },
+    data: loadGenerated('movies') as MovieItem[],
+  } as CollectionConfig<MovieItem>,
+
   books: {
     key: 'books',
     navLabel: '小说',
@@ -133,7 +165,7 @@ export const collections: Record<CollectionKey, CollectionConfig> = {
     variant: 'square',
     coverKeys: ['localCoverPath'],
     metaFields: [
-      { label: 'Author', keys: ['author', 'developer'], fallback: 'Unknown' },
+      { label: 'Author', keys: ['author'], fallback: 'Unknown' },
       { label: 'Publisher', keys: ['publisher'], fallback: 'Unknown' },
       RELEASE,
     ],
@@ -144,8 +176,9 @@ export const collections: Record<CollectionKey, CollectionConfig> = {
     chips: ['Reading shelf', 'Quiet layout'],
     showCount: true,
     emptyText: 'No books added yet. Check back later!',
-    data: loadGenerated('books'),
-  },
+    data: loadGenerated('books') as BookItem[],
+  } as CollectionConfig<BookItem>,
+
   albums: {
     key: 'albums',
     navLabel: '专辑',
@@ -165,7 +198,7 @@ export const collections: Record<CollectionKey, CollectionConfig> = {
     chips: ['Music notes', 'Listening log', 'Album shelf'],
     showCount: false,
     emptyText: 'No albums added yet. Check back later!',
-    data: loadGenerated('albums'),
+    data: loadGenerated('albums') as AlbumItem[],
     fallbackItems: [
       {
         id: 'album-note-0',
@@ -186,11 +219,11 @@ export const collections: Record<CollectionKey, CollectionConfig> = {
         type: 'album',
       },
     ],
-  },
+  } as CollectionConfig<AlbumItem>,
 };
 
 /** 有序集合列表（导航、标签页顺序） */
-export const collectionList: CollectionConfig[] = [
+export const collectionList = [
   collections.games,
   collections.movies,
   collections.books,
@@ -206,21 +239,19 @@ export const OTHER_SECTION = {
   desc: 'More about me.',
 } as const;
 
-/** 兼容 `[...]` 与 `{ items: [...] }` 两种数据形态 */
+/** 生成数据始终是数组；非数组（理论上不会）时回退为空数组 */
 function normalize(data: unknown): MediaItem[] {
-  if (Array.isArray(data)) return data as MediaItem[];
-  const items = (data as { items?: MediaItem[] } | null)?.items;
-  return Array.isArray(items) ? items : [];
+  return Array.isArray(data) ? (data as MediaItem[]) : [];
 }
 
 /** 取集合条目；为空且配置了占位条目时返回占位条目 */
-export function getCollectionItems(config: CollectionConfig): MediaItem[] {
+export function getCollectionItems(config: CollectionConfig<MediaItem>): MediaItem[] {
   const items = normalize(config.data);
   if (items.length === 0 && config.fallbackItems) return config.fallbackItems;
   return items;
 }
 
 /** 集合条目数量（不含占位条目） */
-export function getCollectionCount(config: CollectionConfig): number {
+export function getCollectionCount(config: CollectionConfig<MediaItem>): number {
   return normalize(config.data).length;
 }

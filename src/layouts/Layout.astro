@@ -18,7 +18,9 @@ const heroWallpaper = wallpaper || profile.wallpaper;
 const siteTitle = profile.name || 'logbook';
 const heroClass = heroFullscreen ? 'hero-banner hero-banner--fullscreen' : 'hero-banner';
 const pageClass = heroFullscreen ? 'page-main page-main--landing' : 'page-main';
-const pageFrameClass = heroFullscreen ? 'page-frame page-frame--landing' : 'page-frame';
+const pageFrameClass = heroFullscreen
+  ? 'glass-panel glass-panel--acrylic page-frame page-frame--landing'
+  : 'glass-panel glass-panel--soft page-frame';
 
 const navItems = [
   ...collectionList.map((config) => ({ href: `/${config.key}`, label: config.navLabel })),

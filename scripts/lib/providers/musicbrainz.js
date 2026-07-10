@@ -1,4 +1,4 @@
-const USER_AGENT = 'logbook/1.0.0 (https://houman.top)';
+import { API_USER_AGENT } from '../constants.js';
 
 /**
  * 从 MusicBrainz + Cover Art Archive 获取专辑数据。
@@ -8,7 +8,7 @@ export async function getMusicBrainzAlbumData(releaseId, url) {
   try {
     const response = await fetch(
       `https://musicbrainz.org/ws/2/release/${releaseId}?inc=artist-credits+labels&fmt=json`,
-      { headers: { 'User-Agent': USER_AGENT } },
+      { headers: { 'User-Agent': API_USER_AGENT } },
     );
 
     if (!response.ok) throw new Error(`HTTP ${response.status}`);

@@ -36,6 +36,18 @@
   --glass-saturate-xl: 220%;
   --glass-blur-2xl: 40px;       /* 落地页框架 */
   --glass-saturate-2xl: 200%;
+
+  /* 设计令牌：玻璃面板阴影（单一来源，便于统一调整，避免逐处复制） */
+  --glass-shadow-soft:
+    0 16px 40px rgba(63, 37, 22, 0.12);
+  --glass-shadow-acrylic:
+    0 12px 40px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+  --glass-shadow-hero:
+    0 12px 36px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 * {
@@ -274,13 +286,43 @@ img {
   padding-top: 0;
 }
 
+/* 可复用的毛玻璃面板工具类
+   通过「基类 + 修饰类」组合，统一 backdrop-filter / border / box-shadow，
+   避免在各组件里逐处复制同一套玻璃配方。 */
+.glass-panel {
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 252, 247, 0.14);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+  box-shadow: var(--glass-shadow-hero);
+}
+
+/* 主题色亚克力玻璃（落地页框架、内容标签栏） */
+.glass-panel--acrylic {
+  background: linear-gradient(
+    180deg,
+    rgba(var(--theme-color-rgb), 0.15) 0%,
+    rgba(var(--theme-color-rgb), 0.04) 100%
+  );
+  backdrop-filter: blur(var(--glass-blur-xl)) saturate(var(--glass-saturate-xl));
+  -webkit-backdrop-filter: blur(var(--glass-blur-xl)) saturate(var(--glass-saturate-xl));
+  border-color: rgba(var(--theme-color-rgb), 0.2);
+  box-shadow: var(--glass-shadow-acrylic);
+}
+
+/* 软玻璃（页面卡片，使用页面表面色） */
+.glass-panel--soft {
+  background: var(--surface);
+  backdrop-filter: blur(var(--glass-blur-md));
+  -webkit-backdrop-filter: blur(var(--glass-blur-md));
+  border-color: var(--line);
+  box-shadow: var(--glass-shadow-soft);
+}
+
 .page-frame {
   padding: clamp(1.25rem, 3vw, 2rem);
   border-radius: clamp(24px, 3vw, 32px);
-  border: 1px solid var(--line);
-  background: var(--surface);
-  backdrop-filter: blur(var(--glass-blur-md));
-  box-shadow: var(--shadow-md);
 }
 
 .page-frame--landing {
@@ -288,21 +330,6 @@ img {
   width: min(var(--content-width), calc(100% - 2rem));
   margin: 0 auto;
   padding: 0 0 clamp(1.25rem, 3vw, 2rem);
-  /* Acrylic/Aero 毛玻璃效果 */
-  background: linear-gradient(
-    180deg,
-    rgba(var(--theme-color-rgb), 0.08) 0%,
-    rgba(var(--theme-color-rgb), 0.04) 50%,
-    rgba(var(--theme-color-rgb), 0.02) 100%
-  );
-  backdrop-filter: blur(var(--glass-blur-2xl)) saturate(var(--glass-saturate-2xl));
-  -webkit-backdrop-filter: blur(var(--glass-blur-2xl)) saturate(var(--glass-saturate-2xl));
-  border-color: rgba(var(--theme-color-rgb), 0.18);
-  box-shadow: 
-    0 32px 64px rgba(0, 0, 0, 0.12),
-    0 16px 32px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
 .site-footer {
@@ -696,20 +723,6 @@ img {
   width: min(var(--content-width), calc(100% - 2rem));
   margin: 0 auto;
   border-radius: 20px;
-  /* 增强的Acrylic毛玻璃效果 */
-  background: linear-gradient(
-    180deg,
-    rgba(var(--theme-color-rgb), 0.15) 0%,
-    rgba(var(--theme-color-rgb), 0.1) 100%
-  );
-  backdrop-filter: blur(var(--glass-blur-xl)) saturate(var(--glass-saturate-xl));
-  -webkit-backdrop-filter: blur(var(--glass-blur-xl)) saturate(var(--glass-saturate-xl));
-  border: 1px solid rgba(var(--theme-color-rgb), 0.2);
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.12),
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.05);
 }
 
 .content-tab {
@@ -844,12 +857,6 @@ img {
   width: min(var(--content-width), calc(100% - 2rem));
   margin: 0 auto;
   padding: 1.5rem 1.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 24px;
-  background: rgba(255, 252, 247, 0.14);
-  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .prose-card {

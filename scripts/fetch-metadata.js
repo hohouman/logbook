@@ -92,16 +92,8 @@ async function readJson(filePath, fallback) {
 
 /** 处理一个配置文件（URL 列表）→ 生成数据文件 */
 async function processConfigFile(configFile) {
+  // configFile 来自 listConfigFiles() 的目录扫描，文件必然存在，无需再判空创建。
   const configPath = path.join(CONFIG_DIR, configFile);
-
-  try {
-    await fs.access(configPath);
-  } catch {
-    console.log(`配置不存在，创建默认: ${configFile}`);
-    await fs.writeFile(configPath, JSON.stringify([], null, 2));
-    return;
-  }
-
   const urls = await readJson(configPath, null);
   if (!Array.isArray(urls)) {
     console.error(`${configFile} 格式错误，应为 URL 数组`);
@@ -109,7 +101,8 @@ async function processConfigFile(configFile) {
   }
 
   const generatedFile = path.join(GENERATED_DIR, configFile);
-  const existingData = await readJson(generatedFile, []);
+  const existingRaw = await readJson(generatedFile, []);
+  const existingData = Array.isArray(existingRaw) ? existingRaw : [];
   const existingDataMap = Object.fromEntries(
     existingData.map((item) => [`${item.platform}_${item.id}`, item]),
   );
