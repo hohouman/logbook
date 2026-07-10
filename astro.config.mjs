@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://your-logbook-site.com',
+  site: 'https://houman.top',
   integrations: [],
   trailingSlash: 'never',
   build: {

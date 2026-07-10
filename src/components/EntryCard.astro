@@ -1,0 +1,62 @@
+---
+import type { MediaItem, MetaField } from '../lib/collections';
+
+interface Props {
+  item: MediaItem;
+  tag: string;
+  variant: 'portrait' | 'square';
+  coverKeys: (keyof MediaItem)[];
+  metaFields: MetaField[];
+  descFallback?: string;
+}
+
+const { item, tag, variant, coverKeys, metaFields, descFallback } = Astro.props;
+
+const asText = (value: unknown): string =>
+  Array.isArray(value) ? value.join(', ') : value == null ? '' : String(value);
+
+const hasValue = (value: unknown): boolean =>
+  Array.isArray(value) ? value.length > 0 : Boolean(value);
+
+const cover = coverKeys.map((key) => item[key]).find(hasValue) as string | undefined;
+
+const metas = metaFields
+  .map((field) => {
+    const raw = field.keys.map((key) => item[key]).find(hasValue);
+    const value = asText(raw) || field.fallback || '';
+    return value ? { label: field.label, value } : null;
+  })
+  .filter((meta): meta is { label: string; value: string } => meta !== null);
+
+const description = item.description || descFallback;
+
+// 有外链时用 <a> 包裹，否则用 <div>，避免复制整块卡片
+const Wrapper = item.url ? 'a' : 'div';
+const wrapperProps = item.url
+  ? { class: 'collection-link', href: item.url, target: '_blank', rel: 'noreferrer' }
+  : { class: 'collection-link' };
+---
+
+<Wrapper {...wrapperProps}>
+  <article class={`entry-card entry-card--${variant}`}>
+    <div class="entry-card__media">
+      {cover ? (
+        <img src={cover} alt={item.title} loading="lazy" />
+      ) : (
+        <div class="entry-card__placeholder">No cover</div>
+      )}
+    </div>
+    <div class="entry-card__body">
+      <span class="card-tag">{tag}</span>
+      <h3 class="entry-card__title">{item.title}</h3>
+      {description ? <p class="entry-card__desc">{description}</p> : null}
+      {metas.length > 0 ? (
+        <div class="entry-card__meta">
+          {metas.map((meta) => (
+            <div><strong>{meta.label}:</strong> {meta.value}</div>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  </article>
+</Wrapper>

@@ -1,0 +1,69 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EntryCard from '../components/EntryCard.astro';
+import profile from '../config/profile.json';
+import {
+  collectionList,
+  getCollectionItems,
+  getCollectionCount,
+  type CollectionConfig,
+} from '../lib/collections';
+
+export function getStaticPaths() {
+  return collectionList.map((config) => ({
+    params: { collection: config.key },
+    props: { config },
+  }));
+}
+
+interface Props {
+  config: CollectionConfig;
+}
+
+const { config } = Astro.props;
+const items = getCollectionItems(config);
+const count = getCollectionCount(config);
+
+const chips = [
+  ...(config.showCount ? [`${count} items`] : []),
+  ...config.chips,
+];
+---
+
+<Layout title={config.titleEn} wallpaper={profile.wallpaper}>
+  <div slot="hero" class="page-hero">
+    <p class="page-kicker">Collection / {config.titleEn}</p>
+    <h1>{config.titleEn}</h1>
+    <p>{config.subtitle}</p>
+    <div class="pill-row">
+      {chips.map((chip) => <span class="stat-chip">{chip}</span>)}
+    </div>
+  </div>
+
+  <section class="section-block">
+    <div class="section-heading">
+      <div>
+        <p class="section-eyebrow">{config.libEyebrow}</p>
+        <h2 class="section-title">{config.libTitle}</h2>
+      </div>
+      <p class="section-lead">{config.subtitle}</p>
+    </div>
+
+    {items.length > 0 ? (
+      <div class="collection-grid">
+        {items.map((item) => (
+          <EntryCard
+            item={item}
+            tag={config.tag}
+            variant={config.variant}
+            coverKeys={config.coverKeys}
+            metaFields={config.metaFields}
+            descFallback={config.descFallback}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">{config.emptyText}</div>
+    )}
+  </section>
+</Layout>

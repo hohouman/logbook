@@ -1044,6 +1044,96 @@ img {
   text-transform: uppercase;
 }
 
+/* 独立集合页：hero 与区块 */
+.page-hero {
+  color: #fff7ef;
+}
+
+.page-hero h1 {
+  margin: 0.25rem 0 0.5rem;
+  font-family: 'Noto Serif SC', 'Inter', serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #fff7ef;
+}
+
+.page-hero > p {
+  margin: 0;
+  color: rgba(255, 247, 239, 0.86);
+}
+
+.pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.stat-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(255, 247, 239, 0.14);
+  border: 1px solid rgba(255, 247, 239, 0.2);
+  color: rgba(255, 247, 239, 0.92);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(8px);
+}
+
+.section-block {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.section-eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.section-lead {
+  margin: 0;
+  max-width: 32rem;
+  color: var(--ink-soft);
+}
+
+.empty-state {
+  padding: 2.5rem 1.5rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface-muted);
+  color: var(--ink-soft);
+  text-align: center;
+}
+
+/* 首页深色面板内的 eyebrow 需浅色以保证对比度 */
+.content-panel__summary .section-eyebrow {
+  color: rgba(255, 247, 239, 0.82);
+}
+
 @media (max-width: 720px) {
   .hero-banner {
     min-height: 16rem;

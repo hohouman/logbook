@@ -1,42 +1,27 @@
 ---
-// 导入页面布局组件
 import Layout from '../layouts/Layout.astro';
-
-// 加载个人资料配置数据
+import EntryCard from '../components/EntryCard.astro';
 import profile from '../config/profile.json';
-import gamesData from '../content/_generated/games.json';
-import moviesData from '../content/_generated/movies.json';
-import booksData from '../content/_generated/books.json';
-import albumsData from '../content/_generated/albums.json';
 import OtherContent from '../content/posts/other.md';
+import { collectionList, getCollectionItems } from '../lib/collections';
 
-const games = Array.isArray(gamesData) ? gamesData : (gamesData.items || []);
-const movies = Array.isArray(moviesData) ? moviesData : (moviesData.items || []);
-const books = Array.isArray(booksData) ? booksData : (booksData.items || []);
-const albums = Array.isArray(albumsData) ? albumsData : (albumsData.items || []);
+// 每个集合面板的数据 + 配置
+const panels = collectionList.map((config) => ({
+  config,
+  items: getCollectionItems(config),
+}));
 
-const fallbackAlbumNotes = [
-  {
-    title: '正在循环',
-    desc: '这里以后可以放最近听得最多的专辑、歌单或者一些值得反复回听的作品。',
-  },
-  {
-    title: '喜欢的声音',
-    desc: '偏爱的风格、制作人的名字、某种总会被我反复记住的气质。',
-  },
-  {
-    title: '听歌记录',
-    desc: '我会把专辑页当作比歌单更安静的一种笔记空间。',
-  },
+// 标签页：集合 + “其他”
+const viewerTabs = [
+  ...collectionList.map((config) => ({ key: config.key, label: config.navLabel })),
+  { key: 'other', label: '其他' },
 ];
 
-const albumCards = albums.length > 0 ? albums : fallbackAlbumNotes.map((item, index) => ({
-  id: `album-note-${index}`,
-  title: item.title,
-  artist: 'Personal note',
-  description: item.desc,
-  type: 'album',
-}));
+const otherCopy = {
+  eyebrow: 'Other',
+  title: '看起来，你想要更加了解我……',
+  desc: 'More about me.',
+};
 
 type ProfileActionLink = {
   href: string;
@@ -68,55 +53,14 @@ const socialLinks = Object.entries(profile.social)
     url: platform === 'email' && typeof url === 'string' && !url.startsWith('mailto:') ? `mailto:${url}` : url,
   }));
 
-const viewerTabs = [
-  { key: 'games', label: '游戏' },
-  { key: 'movies', label: '电影' },
-  { key: 'books', label: '小说' },
-  { key: 'albums', label: '专辑' },
-  { key: 'other', label: '其他' },
-];
-
-const panelCopy = {
-  games: {
-    eyebrow: 'Games',
-    title: '那些我玩过的游戏',
-    desc: '封面和发行信息放在一起，像一排可以随手翻看的游戏盒。',
-    tag: 'Game',
-  },
-  movies: {
-    eyebrow: 'Movies',
-    title: '那些我看过的影片',
-    desc: '每一张海报，都是电影的第一句台词。',
-    tag: 'Movie',
-  },
-  books: {
-    eyebrow: 'Books',
-    title: '那些我读过的小说',
-    desc: '像书架一样陈列封面、作者和出版时间，安静但容易回看。',
-    tag: 'Book',
-  },
-  albums: {
-    eyebrow: 'Albums',
-    title: '那些我爱听的CD',
-    desc: '唱片封面、歌手和发行信息并排呈现，保留一点翻专辑的感觉。',
-    tag: 'Album',
-  },
-  other: {
-    eyebrow: 'Other',
-    title: '看起来，你想要更加了解我……',
-    desc: 'More about me.',
-  },
-};
-
-const iconPaths = {
+const iconPaths: Record<string, string> = {
   github: 'M12 2C6.5 2 2 6.5 2 12.2c0 4.6 3 8.4 7.1 9.8.5.1.7-.2.7-.5v-1.8c-2.9.6-3.5-1.2-3.5-1.2-.5-1.2-1.1-1.6-1.1-1.6-.9-.7.1-.7.1-.7 1 .1 1.6 1.1 1.6 1.1.9 1.5 2.4 1.1 3 .9.1-.7.4-1.1.7-1.4-2.3-.3-4.7-1.2-4.7-5.5 0-1.2.4-2.1 1.1-2.9-.1-.3-.5-1.4.1-2.8 0 0 .9-.3 2.9 1.1.8-.2 1.7-.4 2.6-.4s1.8.1 2.6.4c2-1.4 2.9-1.1 2.9-1.1.6 1.4.2 2.5.1 2.8.7.8 1.1 1.7 1.1 2.9 0 4.3-2.4 5.2-4.7 5.5.4.4.8 1 .8 2v2.9c0 .3.2.6.7.5 4.1-1.4 7.1-5.2 7.1-9.8C22 6.5 17.5 2 12 2Z',
   email: 'M4 6.5h16c.8 0 1.5.7 1.5 1.5v8c0 .8-.7 1.5-1.5 1.5H4c-.8 0-1.5-.7-1.5-1.5V8c0-.8.7-1.5 1.5-1.5Zm0 1.6v.2l8 5.1 8-5.1v-.2H4Zm16 8.8V10l-7.6 4.8c-.2.1-.5.1-.8 0L4 10v6.9h16Z',
   default: 'M5 12h14M12 5l7 7-7 7',
 };
 
-function getSocialIcon(platform) {
-  const key = platform.toLowerCase();
-  return iconPaths[key] || iconPaths.default;
+function getSocialIcon(platform: string): string {
+  return iconPaths[platform.toLowerCase()] || iconPaths.default;
 }
 ---
 
@@ -139,7 +83,7 @@ function getSocialIcon(platform) {
 
           <div class="social-icon-row" aria-label="社交媒体">
             {socialLinks.map(({ platform, url }) => (
-              <a href={url as string} target="_blank" class="social-icon-button" aria-label={platform} title={platform} key={platform}>
+              <a href={url as string} target="_blank" class="social-icon-button" aria-label={platform} title={platform}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d={getSocialIcon(platform)} />
                 </svg>
@@ -168,180 +112,37 @@ function getSocialIcon(platform) {
 
       <div class="content-viewer" data-content-viewer>
         <div class="content-viewer__panels">
-          <section class="content-panel" data-panel="games" data-active="true">
-            <div class="content-panel__summary">
-              <p class="section-eyebrow" id="section-eyebrow-games">{panelCopy.games.eyebrow}</p>
-              <h3>{panelCopy.games.title}</h3>
-              <p>{panelCopy.games.desc}</p>
-            </div>
-            {games.length > 0 ? (
-              <div class="content-panel__list">
-                {games.map((game) => (
-                  <a class="collection-link" href={game.url} target="_blank" rel="noreferrer">
-                    <article class="entry-card entry-card--portrait">
-                      <div class="entry-card__media">
-                        {game.localPosterPath || game.localCoverPath ? (
-                          <img src={game.localPosterPath || game.localCoverPath} alt={game.title} loading="lazy" />
-                        ) : (
-                          <div class="entry-card__placeholder">No cover</div>
-                        )}
-                      </div>
-                      <div class="entry-card__body">
-                        <span class="card-tag">{panelCopy.games.tag}</span>
-                        <h3 class="entry-card__title">{game.title}</h3>
-                        {game.description ? <p class="entry-card__desc">{game.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-                        <div class="entry-card__meta">
-                          <div><strong>Developer:</strong> {Array.isArray(game.developer) ? game.developer.join(', ') : game.developer || 'Unknown'}</div>
-                          <div><strong>Publisher:</strong> {Array.isArray(game.publisher) ? game.publisher.join(', ') : game.publisher || 'Unknown'}</div>
-                          <div><strong>Release:</strong> {game.releaseDate || 'TBA'}</div>
-                        </div>
-                      </div>
-                    </article>
-                  </a>
-                ))}
+          {panels.map(({ config, items }, index) => (
+            <section class="content-panel" data-panel={config.key} data-active={index === 0 ? 'true' : undefined}>
+              <div class="content-panel__summary">
+                <p class="section-eyebrow" id={`section-eyebrow-${config.key}`}>{config.titleEn}</p>
+                <h3>{config.subtitle}</h3>
+                <p>{config.panelDesc}</p>
               </div>
-            ) : (
-              <div class="empty-state">No games added yet. Check back later!</div>
-            )}
-          </section>
-
-          <section class="content-panel" data-panel="movies">
-            <div class="content-panel__summary">
-              <p class="section-eyebrow" id="section-eyebrow-movies">{panelCopy.movies.eyebrow}</p>
-              <h3>{panelCopy.movies.title}</h3>
-              <p>{panelCopy.movies.desc}</p>
-            </div>
-            {movies.length > 0 ? (
-              <div class="content-panel__list">
-                {movies.map((movie) => (
-                  <a class="collection-link" href={movie.url} target="_blank" rel="noreferrer">
-                    <article class="entry-card entry-card--portrait">
-                      <div class="entry-card__media">
-                        {movie.localCoverPath ? (
-                          <img src={movie.localCoverPath} alt={movie.title} loading="lazy" />
-                        ) : (
-                          <div class="entry-card__placeholder">No cover</div>
-                        )}
-                      </div>
-                      <div class="entry-card__body">
-                        <span class="card-tag">{panelCopy.movies.tag}</span>
-                        <h3 class="entry-card__title">{movie.title}</h3>
-                        {movie.description ? <p class="entry-card__desc">{movie.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-                        <div class="entry-card__meta">
-                          <div><strong>Director:</strong> {Array.isArray(movie.director) ? movie.director.join(', ') : movie.director || 'Unknown'}</div>
-                          <div><strong>Release:</strong> {movie.releaseDate || 'TBA'}</div>
-                        </div>
-                      </div>
-                    </article>
-                  </a>
-                ))}
-              </div>
-            ) : (
-              <div class="empty-state">No movies added yet. Check back later!</div>
-            )}
-          </section>
-
-          <section class="content-panel" data-panel="books">
-            <div class="content-panel__summary">
-              <p class="section-eyebrow" id="section-eyebrow-books">{panelCopy.books.eyebrow}</p>
-              <h3>{panelCopy.books.title}</h3>
-              <p>{panelCopy.books.desc}</p>
-            </div>
-            {books.length > 0 ? (
-              <div class="content-panel__list">
-                {books.map((book) => (
-                  <a class="collection-link" href={book.url} target="_blank" rel="noreferrer">
-                    <article class="entry-card entry-card--square">
-                      <div class="entry-card__media">
-                        {book.localCoverPath ? (
-                          <img src={book.localCoverPath} alt={book.title} loading="lazy" />
-                        ) : (
-                          <div class="entry-card__placeholder">No cover</div>
-                        )}
-                      </div>
-                      <div class="entry-card__body">
-                        <span class="card-tag">{panelCopy.books.tag}</span>
-                        <h3 class="entry-card__title">{book.title}</h3>
-                        {book.description ? <p class="entry-card__desc">{book.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-                        <div class="entry-card__meta">
-                          <div><strong>Author:</strong> {Array.isArray(book.author) ? book.author.join(', ') : book.author || (Array.isArray(book.developer) ? book.developer.join(', ') : book.developer) || 'Unknown'}</div>
-                          <div><strong>Publisher:</strong> {Array.isArray(book.publisher) ? book.publisher.join(', ') : book.publisher || 'Unknown'}</div>
-                          <div><strong>Release:</strong> {book.releaseDate || 'TBA'}</div>
-                        </div>
-                      </div>
-                    </article>
-                  </a>
-                ))}
-              </div>
-            ) : (
-              <div class="empty-state">No books added yet. Check back later!</div>
-            )}
-          </section>
-
-          <section class="content-panel" data-panel="albums">
-            <div class="content-panel__summary">
-              <p class="section-eyebrow" id="section-eyebrow-albums">{panelCopy.albums.eyebrow}</p>
-              <h3>{panelCopy.albums.title}</h3>
-              <p>{panelCopy.albums.desc}</p>
-            </div>
-            {albumCards.length > 0 ? (
-              <div class="content-panel__list">
-                {albumCards.map((item) => (
-                  item.url ? (
-                    <a class="collection-link" href={item.url} target="_blank" rel="noreferrer">
-                      <article class="entry-card entry-card--square">
-                        <div class="entry-card__media">
-                          {item.localCoverPath ? (
-                            <img src={item.localCoverPath} alt={item.title} loading="lazy" />
-                          ) : (
-                            <div class="entry-card__placeholder">No cover</div>
-                          )}
-                        </div>
-                        <div class="entry-card__body">
-                          <span class="card-tag">{panelCopy.albums.tag}</span>
-                          <h3 class="entry-card__title">{item.title}</h3>
-                          {item.description ? <p class="entry-card__desc">{item.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-                          <div class="entry-card__meta">
-                            {item.artist && <div><strong>Artist:</strong> {Array.isArray(item.artist) ? item.artist.join(', ') : item.artist}</div>}
-                            {item.publisher && <div><strong>Publisher:</strong> {Array.isArray(item.publisher) ? item.publisher.join(', ') : item.publisher}</div>}
-                            {item.releaseDate && <div><strong>Release:</strong> {item.releaseDate}</div>}
-                          </div>
-                        </div>
-                      </article>
-                    </a>
-                  ) : (
-                    <article class="entry-card entry-card--square">
-                      <div class="entry-card__media">
-                        {item.localCoverPath ? (
-                          <img src={item.localCoverPath} alt={item.title} loading="lazy" />
-                        ) : (
-                          <div class="entry-card__placeholder">No cover</div>
-                        )}
-                      </div>
-                      <div class="entry-card__body">
-                        <span class="card-tag">{panelCopy.albums.tag}</span>
-                        <h3 class="entry-card__title">{item.title}</h3>
-                        {item.description ? <p class="entry-card__desc">{item.description}</p> : <p class="entry-card__desc">No description provided.</p>}
-                        <div class="entry-card__meta">
-                          {item.artist && <div><strong>Artist:</strong> {Array.isArray(item.artist) ? item.artist.join(', ') : item.artist}</div>}
-                          {item.publisher && <div><strong>Publisher:</strong> {Array.isArray(item.publisher) ? item.publisher.join(', ') : item.publisher}</div>}
-                          {item.releaseDate && <div><strong>Release:</strong> {item.releaseDate}</div>}
-                        </div>
-                      </div>
-                    </article>
-                  )
-                ))}
-              </div>
-            ) : (
-              <div class="empty-state">No albums added yet. Check back later!</div>
-            )}
-          </section>
+              {items.length > 0 ? (
+                <div class="content-panel__list">
+                  {items.map((item) => (
+                    <EntryCard
+                      item={item}
+                      tag={config.tag}
+                      variant={config.variant}
+                      coverKeys={config.coverKeys}
+                      metaFields={config.metaFields}
+                      descFallback={config.descFallback}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div class="empty-state">{config.emptyText}</div>
+              )}
+            </section>
+          ))}
 
           <section class="content-panel" data-panel="other">
             <div class="content-panel__summary">
-              <p class="section-eyebrow" id="section-eyebrow-other">{panelCopy.other.eyebrow}</p>
-              <h3>{panelCopy.other.title}</h3>
-              <p>{panelCopy.other.desc}</p>
+              <p class="section-eyebrow" id="section-eyebrow-other">{otherCopy.eyebrow}</p>
+              <h3>{otherCopy.title}</h3>
+              <p>{otherCopy.desc}</p>
             </div>
             <div class="prose-card">
               <OtherContent />
@@ -355,173 +156,98 @@ function getSocialIcon(platform) {
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    const viewer = document.querySelector('[data-content-viewer]');
-    const tabs = Array.from(document.querySelectorAll('[data-view]'));
-    const panels = Array.from(document.querySelectorAll('[data-panel]'));
-    
-    // 处理向下箭头按钮的点击事件
+    const viewer = document.querySelector<HTMLElement>('[data-content-viewer]');
+    const tabs = Array.from(document.querySelectorAll<HTMLElement>('[data-view]'));
+    const panels = Array.from(document.querySelectorAll<HTMLElement>('[data-panel]'));
+
+    // 向下箭头：平滑滚动到内容标签栏
     const scrollLink = document.querySelector('.hero-scroll-link');
     if (scrollLink) {
       scrollLink.addEventListener('click', (event) => {
         event.preventDefault();
-        
-        // 获取content-tabs元素
         const contentTabs = document.getElementById('content-tabs');
         if (!contentTabs) return;
-        
-        // 计算元素相对于文档顶部的绝对位置
+
         const rect = contentTabs.getBoundingClientRect();
         const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        const targetPosition = rect.top + scrollTop;
-        
-        // 平滑滚动到目标位置
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
-        });
+        window.scrollTo({ top: rect.top + scrollTop, behavior: 'smooth' });
       });
     }
 
-    if (viewer && tabs.length && panels.length) {
-      const keys = tabs.map((tab) => tab.dataset.view);
-      const tabsMap = Object.fromEntries(panels.map((panel) => [panel.dataset.panel, panel]));
+    if (!viewer || !tabs.length || !panels.length) return;
 
-      const setCurrentKey = (key) => {
-        viewer.dataset.activeView = key;
-      };
+    const keys = tabs.map((tab) => tab.dataset.view);
+    const panelMap = Object.fromEntries(panels.map((panel) => [panel.dataset.panel, panel]));
 
-      const setActive = (key, forceScroll = false) => {
-        if (!key || !tabsMap[key]) return;
-        
-        const currentKey = getCurrentKey();
-        const isSameTab = currentKey === key;
-        
-        // 获取目标panel和它的第一个子元素（说明栏）
-        const targetPanel = tabsMap[key];
-        const firstChild = targetPanel.firstElementChild;
-        const contentTabs = document.getElementById('content-tabs');
-        
-        // 先切换tab内容
-        tabs.forEach((tab) => tab.setAttribute('aria-selected', 'false'));
-        panels.forEach((panel) => panel.removeAttribute('data-active'));
-        tabsMap[key].setAttribute('data-active', 'true');
-        const activeTab = tabs.find((t) => t.dataset.view === key);
-        if (activeTab) activeTab.setAttribute('aria-selected', 'true');
-        setCurrentKey(key);
-        
-        // 只有在以下情况才执行滚动：
-        // 1. forceScroll为true（明确需要滚动）
-        // 2. 切换到不同的tab且菜单栏不在顶部
-        // 3. 内容被菜单栏遮挡
-        if (contentTabs && firstChild) {
-          const tabsRect = contentTabs.getBoundingClientRect();
-          const firstChildRect = firstChild.getBoundingClientRect();
-          const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-          
-          // 判断菜单栏是否处于sticky状态
-          const isTabsSticky = tabsRect.top >= -10 && tabsRect.top <= 20;
-          
-          let shouldScroll = false;
-          let targetScrollTop = scrollTop;
-          
-          if (isTabsSticky) {
-            // 菜单栏已在顶部
-            const tabsHeight = tabsRect.height;
-            const isContentObscured = firstChildRect.top < tabsHeight + 20;
-            
-            if (isContentObscured || forceScroll) {
-              // 内容被遮挡或强制滚动，向上微调
-              shouldScroll = true;
-              targetScrollTop = scrollTop + firstChildRect.top - tabsHeight - 20;
-            }
-            // 如果内容位置已经恰好且不是强制滚动，不调整
-          } else {
-            // 菜单栏不在顶部，向下滚动使tabs到达视口顶部
-            if (!isSameTab || forceScroll) {
-              shouldScroll = true;
-              targetScrollTop = tabsRect.top + scrollTop;
-            }
-          }
-          
-          if (shouldScroll && Math.abs(targetScrollTop - scrollTop) > 5) {
-            window.scrollTo({
-              top: Math.max(0, targetScrollTop),
-              behavior: 'smooth'
-            });
-          }
+    const getCurrentKey = () => viewer.dataset.activeView || 'games';
+    const setCurrentKey = (key: string) => { viewer.dataset.activeView = key; };
+
+    const setActive = (key: string | undefined, forceScroll = false) => {
+      if (!key || !panelMap[key]) return;
+
+      const isSameTab = getCurrentKey() === key;
+      const targetPanel = panelMap[key];
+      const firstChild = targetPanel.firstElementChild;
+      const contentTabs = document.getElementById('content-tabs');
+
+      tabs.forEach((tab) => tab.setAttribute('aria-selected', 'false'));
+      panels.forEach((panel) => panel.removeAttribute('data-active'));
+      targetPanel.setAttribute('data-active', 'true');
+      tabs.find((tab) => tab.dataset.view === key)?.setAttribute('aria-selected', 'true');
+      setCurrentKey(key);
+
+      if (!contentTabs || !firstChild) return;
+
+      const tabsRect = contentTabs.getBoundingClientRect();
+      const firstChildRect = firstChild.getBoundingClientRect();
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      const isTabsSticky = tabsRect.top >= -10 && tabsRect.top <= 20;
+
+      let shouldScroll = false;
+      let targetScrollTop = scrollTop;
+
+      if (isTabsSticky) {
+        const tabsHeight = tabsRect.height;
+        const isContentObscured = firstChildRect.top < tabsHeight + 20;
+        if (isContentObscured || forceScroll) {
+          shouldScroll = true;
+          targetScrollTop = scrollTop + firstChildRect.top - tabsHeight - 20;
         }
-      };
+      } else if (!isSameTab || forceScroll) {
+        shouldScroll = true;
+        targetScrollTop = tabsRect.top + scrollTop;
+      }
 
-      const getCurrentKey = () => viewer.dataset.activeView || 'games';
-
-      const move = (direction) => {
-        const currentKey = getCurrentKey();
-        const currentIndex = keys.indexOf(currentKey);
-        const nextIndex = direction === 'next'
-          ? (currentIndex + 1) % keys.length
-          : (currentIndex - 1 + keys.length) % keys.length;
-        setActive(keys[nextIndex] || 'games');
-      };
-
-      tabs.forEach((tab) => {
-        tab.addEventListener('click', () => {
-          const clickedKey = tab.dataset.view || 'games';
-          const currentKey = getCurrentKey();
-          
-          // 如果点击的是当前已激活的tab，强制滚动到正确位置
-          if (clickedKey === currentKey) {
-            setActive(clickedKey, true);
-          } else {
-            // 切换到不同的tab，正常处理
-            setActive(clickedKey, false);
-          }
-        });
-      });
-
-      // 移除初始化时的setActive调用，避免刷新页面时自动滚动
-    }
-  });
-
-  // 移动端视口高度修正 - 解决浏览器地址栏动态变化问题
-  const fixMobileViewport = () => {
-    const setVH = () => {
-      // 使用 visualViewport API（更精确）或降级到 innerHeight
-      const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      document.documentElement.style.setProperty('--vh', `${height}px`);
+      if (shouldScroll && Math.abs(targetScrollTop - scrollTop) > 5) {
+        window.scrollTo({ top: Math.max(0, targetScrollTop), behavior: 'smooth' });
+      }
     };
 
-    setVH();
-    
-    // 监听视口变化
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', setVH);
-    }
-    window.addEventListener('resize', setVH);
-    window.addEventListener('orientationchange', () => {
-      setTimeout(setVH, 100);
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const clickedKey = tab.dataset.view || 'games';
+        setActive(clickedKey, clickedKey === getCurrentKey());
+      });
     });
+  });
+
+  // 移动端视口高度修正：解决浏览器地址栏动态变化
+  const setVH = () => {
+    const height = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty('--vh', `${height}px`);
   };
 
-  // 初始化并监听变化
-  let resizeTimer;
+  let resizeTimer: ReturnType<typeof setTimeout>;
   const handleResize = () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => {
-      fixMobileViewport();
-      // ensureBadgeVisible(); - 已移除，不再需要
-    }, 50); // 50ms 防抖
+    resizeTimer = setTimeout(setVH, 50);
   };
 
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', setVH);
+  }
   window.addEventListener('resize', handleResize);
-  window.addEventListener('orientationchange', () => {
-    setTimeout(handleResize, 100);
-  });
-  
-  // 初始执行
-  window.addEventListener('load', () => {
-    setTimeout(handleResize, 100);
-  });
-  handleResize();
-
-  fixMobileViewport();
+  window.addEventListener('orientationchange', () => setTimeout(handleResize, 100));
+  window.addEventListener('load', () => setTimeout(handleResize, 100));
+  setVH();
 </script>

@@ -3,6 +3,7 @@ import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
 import profile from '../config/profile.json';
+import { collectionList } from '../lib/collections';
 
 interface Props {
   title?: string;
@@ -14,12 +15,15 @@ interface Props {
 
 const { title, description, image, wallpaper, heroFullscreen } = Astro.props;
 const heroWallpaper = wallpaper || profile.wallpaper;
-const siteTitle = profile.blogTitle || profile.name || 'logbook';
+const siteTitle = profile.name || 'logbook';
 const heroClass = heroFullscreen ? 'hero-banner hero-banner--fullscreen' : 'hero-banner';
 const pageClass = heroFullscreen ? 'page-main page-main--landing' : 'page-main';
-const headerClass = 'site-header';
-const shouldFadeHero = Boolean(heroFullscreen);
 const pageFrameClass = heroFullscreen ? 'page-frame page-frame--landing' : 'page-frame';
+
+const navItems = [
+  ...collectionList.map((config) => ({ href: `/${config.key}`, label: config.navLabel })),
+  { href: '/other', label: '其他' },
+];
 ---
 
 <!DOCTYPE html>
@@ -39,7 +43,7 @@ const pageFrameClass = heroFullscreen ? 'page-frame page-frame--landing' : 'page
 </head>
 <body>
   <div class="site-shell">
-    <section class={heroClass}>
+    <section class={heroClass} data-hero-wallpaper={heroFullscreen ? heroWallpaper : undefined}>
       <img src={heroWallpaper} alt="背景封面" class="hero-banner-image" />
       <div class="hero-banner-overlay"></div>
       <div class={`hero-banner-content${heroFullscreen ? ' hero-banner-content--landing' : ''}`}>
@@ -54,17 +58,13 @@ const pageFrameClass = heroFullscreen ? 'page-frame page-frame--landing' : 'page
 
     <main class={pageClass}>
       {!heroFullscreen ? (
-        <header class={headerClass}>
+        <header class="site-header">
           <a href="/" class="site-brand">
             <span class="site-brand-mark"></span>
             <span>{siteTitle}</span>
           </a>
           <nav class="site-nav" aria-label="主导航">
-            <a href="/games">游戏</a>
-            <a href="/movies">电影</a>
-            <a href="/books">书籍</a>
-            <a href="/albums">专辑</a>
-            <a href="/other">其他</a>
+            {navItems.map((item) => <a href={item.href}>{item.label}</a>)}
           </nav>
         </header>
       ) : null}
@@ -76,147 +76,14 @@ const pageFrameClass = heroFullscreen ? 'page-frame page-frame--landing' : 'page
     <Footer />
   </div>
 
-  {shouldFadeHero ? (
-    <script define:vars={{ heroWallpaper }}>
-      const root = document.documentElement;
+  <script>
+    import { initTheme } from '../lib/theme';
 
-      const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
-
-      const hexToRgb = (hex) => {
-        const normalized = hex.replace('#', '');
-        if (normalized.length !== 6) {
-          return null;
-        }
-
-        return {
-          r: Number.parseInt(normalized.slice(0, 2), 16),
-          g: Number.parseInt(normalized.slice(2, 4), 16),
-          b: Number.parseInt(normalized.slice(4, 6), 16),
-        };
-      };
-
-      const rgbToHex = (r, g, b) =>
-        `#${[r, g, b]
-          .map((value) => Math.round(clamp(value, 0, 255)).toString(16).padStart(2, '0'))
-          .join('')}`;
-
-      // 计算选中文字背景色的函数
-      const calculateSelectionColor = (bgRgb, textRgb, opacity = 0.2) => {
-        const r = Math.round(bgRgb.r * (1 - opacity) + textRgb.r * opacity);
-        const g = Math.round(bgRgb.g * (1 - opacity) + textRgb.g * opacity);
-        const b = Math.round(bgRgb.b * (1 - opacity) + textRgb.b * opacity);
-        
-        return `rgba(${r}, ${g}, ${b}, ${opacity})`;
-      };
-
-      // 更新选中文字背景色
-      const updateSelectionColor = (selectionColor) => {
-        // 移除之前的样式
-        const existingStyle = document.getElementById('dynamic-selection-style');
-        if (existingStyle) {
-          existingStyle.remove();
-        }
-        
-        // 创建新的样式
-        const style = document.createElement('style');
-        style.id = 'dynamic-selection-style';
-        style.textContent = `
-          ::selection {
-            background: ${selectionColor};
-          }
-          
-          ::-moz-selection {
-            background: ${selectionColor};
-          }
-        `;
-        
-        document.head.appendChild(style);
-      };
-
-      const sampleThemeColor = async (url) => {
-        try {
-          const image = new Image();
-          image.crossOrigin = 'anonymous';
-          image.src = url;
-
-          await new Promise((resolve, reject) => {
-            image.onload = resolve;
-            image.onerror = reject;
-          });
-
-          const canvas = document.createElement('canvas');
-          const context = canvas.getContext('2d');
-          if (!context) {
-            return '#8f4e2b';
-          }
-
-          const size = 64;
-          canvas.width = size;
-          canvas.height = size;
-          context.drawImage(image, 0, 0, size, size);
-
-          const { data } = context.getImageData(0, 0, size, size);
-          let red = 0;
-          let green = 0;
-          let blue = 0;
-          let count = 0;
-
-          for (let index = 0; index < data.length; index += 16) {
-            red += data[index];
-            green += data[index + 1];
-            blue += data[index + 2];
-            count += 1;
-          }
-
-          if (count === 0) {
-            return '#8f4e2b';
-          }
-
-          return rgbToHex(red / count, green / count, blue / count);
-        } catch {
-          return '#8f4e2b';
-        }
-      };
-
-      const updateHeroOpacity = () => {
-        const limit = Math.max(window.innerHeight * 0.9, 1);
-        const value = Math.max(0.28, 1 - window.scrollY / limit);
-        root.style.setProperty('--hero-opacity', String(value));
-      };
-
-      const applyThemeColor = async () => {
-        const color = await sampleThemeColor(heroWallpaper);
-        const rgb = hexToRgb(color);
-        if (!rgb) {
-          return;
-        }
-
-        root.style.setProperty('--theme-color', color);
-        root.style.setProperty('--theme-color-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
-        root.style.setProperty('--theme-surface', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.14)`);
-        root.style.setProperty('--theme-surface-strong', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.24)`);
-        
-        // 获取页面背景色和文字颜色，计算选中文字背景色
-        const computedBgColor = getComputedStyle(document.documentElement).getPropertyValue('--bg').trim() || '#f4efe6';
-        const computedTextColor = getComputedStyle(document.documentElement).getPropertyValue('--ink').trim() || '#1f1a17';
-        
-        const bgRgb = hexToRgb(computedBgColor.startsWith('#') ? computedBgColor : '#f4efe6');
-        const textRgb = hexToRgb(computedTextColor.startsWith('#') ? computedTextColor : '#1f1a17');
-        
-        if (bgRgb && textRgb) {
-          const selectionColor = calculateSelectionColor(bgRgb, textRgb, 0.2);
-          updateSelectionColor(selectionColor);
-        }
-      };
-
-      document.addEventListener('DOMContentLoaded', () => {
-        applyThemeColor();
-        updateHeroOpacity();
-      }, { once: true });
-
-      window.addEventListener('scroll', updateHeroOpacity, { passive: true });
-      window.addEventListener('resize', updateHeroOpacity);
-    </script>
-  ) : null}
+    const hero = document.querySelector<HTMLElement>('.hero-banner--fullscreen');
+    const wallpaper = hero?.dataset.heroWallpaper;
+    if (wallpaper) {
+      initTheme(wallpaper);
+    }
+  </script>
 </body>
 </html>
