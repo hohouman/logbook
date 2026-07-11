@@ -34,8 +34,6 @@
   --glass-blur-lg: 18px;        /* 头部 / 面板 */
   --glass-blur-xl: 30px;        /* 内容标签栏 */
   --glass-saturate-xl: 220%;
-  --glass-blur-2xl: 40px;       /* 落地页框架 */
-  --glass-saturate-2xl: 200%;
 
   /* 设计令牌：玻璃面板阴影（单一来源，便于统一调整，避免逐处复制） */
   --glass-shadow-soft:
@@ -354,6 +352,7 @@ img {
 .page-hero {
   display: grid;
   gap: 1rem;
+  color: var(--on-hero);
 }
 
 .landing-hero {
@@ -422,8 +421,7 @@ img {
   align-items: center;
 }
 
-.profile-panel,
-.site-link-panel {
+.profile-panel {
   padding: clamp(1.25rem, 3vw, 2rem);
   border-radius: 28px;
   background: rgba(29, 19, 15, 0.48);
@@ -552,86 +550,6 @@ img {
 .external-link-button:hover {
   transform: translateY(-2px);
   background: rgba(var(--on-hero-rgb), 0.18);
-}
-
-.hero-pill-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.65rem;
-}
-
-.hero-pill-row--links {
-  align-items: center;
-}
-
-.hero-pill-label,
-.hero-pill-link {
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.45rem;
-  padding: 0.45rem 0.9rem;
-  border-radius: 999px;
-  border: 1px solid rgba(var(--on-hero-rgb), 0.14);
-  background: rgba(var(--on-hero-rgb), 0.06);
-  color: var(--on-hero);
-}
-
-.hero-pill-label {
-  font-weight: 700;
-}
-
-.hero-pill-link:hover {
-  background: rgba(var(--on-hero-rgb), 0.12);
-}
-
-.site-link-panel {
-  display: grid;
-  gap: 1rem;
-}
-
-.section-eyebrow--dark {
-  background: rgba(var(--on-hero-rgb), 0.1);
-  color: rgba(var(--on-hero-rgb), 0.82);
-}
-
-.section-title--hero {
-  color: var(--on-hero);
-}
-
-.section-lead--light {
-  color: rgba(var(--on-hero-rgb), 0.76);
-}
-
-.site-link-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.8rem;
-}
-
-.site-link-card {
-  display: grid;
-  gap: 0.2rem;
-  padding: 0.9rem 1rem;
-  border-radius: 18px;
-  background: rgba(var(--on-hero-rgb), 0.06);
-  border: 1px solid rgba(var(--on-hero-rgb), 0.1);
-  color: var(--on-hero);
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-.site-link-card:hover {
-  transform: translateY(-2px);
-  background: rgba(var(--on-hero-rgb), 0.1);
-}
-
-.site-link-card__label {
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.site-link-card__desc {
-  color: rgba(var(--on-hero-rgb), 0.72);
-  font-size: 0.88rem;
 }
 
 .hero-scroll-hint {
@@ -1069,10 +987,6 @@ img {
 }
 
 /* 独立集合页：hero 与区块 */
-.page-hero {
-  color: var(--on-hero);
-}
-
 .page-hero h1 {
   margin: 0.25rem 0 0.5rem;
   font-family: 'Noto Serif SC', 'Inter', serif;
@@ -1165,10 +1079,6 @@ img {
 
   .hero-banner--fullscreen {
     min-height: 100svh;
-  }
-
-  .site-link-grid {
-    grid-template-columns: 1fr;
   }
 
   .page-main,
