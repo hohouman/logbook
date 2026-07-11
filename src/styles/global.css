@@ -656,10 +656,11 @@ img {
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 999px;
-  border: 1px solid rgba(var(--theme-color-rgb), 0.28);
-  background: rgba(29, 19, 15, 0.65);
+  border: 1px solid rgba(var(--on-hero-rgb), 0.12);
+  background: rgba(29, 19, 15, 0.48);
   color: var(--on-hero);
-  backdrop-filter: blur(var(--glass-blur-sm));
+  backdrop-filter: blur(var(--glass-blur-lg));
+  box-shadow: 0 24px 60px rgba(14, 9, 7, 0.24);
   transition: transform 0.2s ease, background-color 0.2s ease, bottom 0.3s ease;
   z-index: 20;
   cursor: pointer;
