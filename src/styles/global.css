@@ -96,16 +96,16 @@ img {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(56, 41, 33, 0.05);
+  background: rgba(var(--theme-color-rgb, 143, 78, 43), 0.05);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(143, 78, 43, 0.34);
+  background: rgba(var(--theme-color-rgb, 143, 78, 43), 0.34);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(143, 78, 43, 0.48);
+  background: rgba(var(--theme-color-rgb, 143, 78, 43), 0.48);
 }
 
 .site-shell {
